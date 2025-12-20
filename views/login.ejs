@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      :root {
+        --primary-color: #4a6da7;
+        --accent-color: #6c8cbb;
+        --background-color: #f5f7fa;
+      }
+
+      body {
+        background: var(--background-color);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .login-container {
+        width: 100%;
+        max-width: 420px;
+        padding: 15px;
+      }
+
+      .login-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        animation: slideUp 0.5s ease-out;
+      }
+
+      .logo-container {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .logo {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .logo:hover {
+        transform: scale(1.05);
+      }
+
+      h1 {
+        color: var(--primary-color);
+        font-size: 1.8rem;
+        text-align: center;
+        margin-bottom: 0.5rem;
+      }
+
+      h2 {
+        color: #666;
+        font-size: 1.2rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        font-weight: normal;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-label {
+        color: #555;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+
+      .ui.input {
+        width: 100%;
+      }
+
+      .ui.input input {
+        border-radius: 8px;
+        padding: 12px 15px 12px 45px !important;
+        border: 2px solid #e1e5ea;
+        transition: all 0.3s ease;
+      }
+
+      .ui.input input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(74, 109, 167, 0.1);
+      }
+
+      .ui.input i.icon {
+        opacity: 0.5;
+        font-size: 1.2rem;
+        transition: opacity 0.3s ease;
+      }
+
+      .ui.input input:focus + i.icon {
+        opacity: 1;
+        color: var(--primary-color);
+      }
+
+      .btn-login {
+        width: 100%;
+        padding: 12px;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+      }
+
+      .btn-login:hover {
+        background: var(--accent-color);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(74, 109, 167, 0.2);
+      }
+
+      .login-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        color: #666;
+      }
+
+      .login-footer a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .login-footer a:hover {
+        color: var(--accent-color);
+      }
+
+      .alert {
+        border-radius: 8px;
+        animation: shake 0.5s ease-in-out;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+      }
+
+      .decoration {
+        position: fixed;
+        border-radius: 50%;
+        z-index: -1;
+      }
+
+      .decoration-1 {
+        width: 300px;
+        height: 300px;
+        background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+        top: -150px;
+        left: -150px;
+        opacity: 0.1;
+      }
+
+      .decoration-2 {
+        width: 200px;
+        height: 200px;
+        background: linear-gradient(-45deg, var(--primary-color), var(--accent-color));
+        bottom: -100px;
+        right: -100px;
+        opacity: 0.1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+
+    <div class="login-container">
+      <div class="login-card">
+        <div class="logo-container">
+          <img src="iism.png" alt="Shanti Wear House" class="logo">
+        </div>
+
+        <h1>Intelligent Inventory Management System</h1>
+        <h2>Welcome!</h2>
+
+        <% if (messages.error) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="exclamation triangle icon"></i>
+          <%= messages.error %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } %>
+
+        <form action="/login" method="POST" class="needs-validation" novalidate>
+          <!-- CSRF Protection -->
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div class="form-group">
+            <label for="email" class="form-label">Email address</label>
+            <div class="ui left icon input">
+              <input type="email" class="form-control" id="email" name="email"
+                     placeholder="Enter your email" required autofocus>
+              <i class="user icon"></i>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <div class="ui left icon input">
+              <input type="password" class="form-control" id="password" name="password"
+                     placeholder="Enter your password" required>
+              <i class="lock icon"></i>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-login">
+            <i class="sign in icon"></i> Login
+          </button>
+        </form>
+
+        <div class="login-footer">
+          Don't have an account? <a href="/register">Register now</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      var alertList = document.querySelectorAll('.alert')
+      alertList.forEach(function (alert) {
+        new bootstrap.Alert(alert)
+      })
+    </script>
+  </body>
+</html>
+

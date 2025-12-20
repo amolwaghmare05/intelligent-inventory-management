@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--Custom CSS-->
+  <link rel="stylesheet" href="styles.css">
+  <!--Semantic-UI CSS-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+  <title>Orders</title>
+  <style>
+    .filter-active {
+      background-color: var(--primary-light);
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+      padding: 5px;
+      border-radius: 4px;
+    }
+    
+    .form-select:disabled {
+      background-color: #e9ecef;
+      opacity: 0.65;
+    }
+
+    .table-header {
+      background-color: var(--primary-color);
+      color: var(--text-light);
+    }
+
+    .order-card {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      margin-bottom: 1rem;
+    }
+
+    .order-card .card-header {
+      background-color: var(--primary-color);
+      color: var(--text-light);
+      border-radius: 7px 7px 0 0;
+    }
+
+    .order-summary {
+      background-color: var(--primary-light);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .order-summary h3 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!--Vertical Navbar-->
+  <div class="vertical-nav bg-white" id="sidebar">
+    <div class="py-4 px-3 mb-4" style="background: linear-gradient(135deg, #4a6da7, #2c4b81); border-bottom: 3px solid #1c3563;">
+      <div class="media d-flex align-items-center">
+        <img src="iism.png" alt="IIMS Logo" width="70" class="mr-3 rounded-circle img-thumbnail shadow-sm" style="border: 2px solid white; padding: 2px;">
+        &emsp;<div class="media-body">
+          <h4 class="m-0 text-light" style="font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);"><shop-name></h4>
+          <p class="font-weight-light text-white mb-0" style="font-size: 0.85rem; opacity: 0.9;">Intelligent Inventory Management System<p>
+        </div>
+      </div>
+    </div>
+    <form action="/logout?_method=DELETE" method="POST">
+      <center><button type="submit" class="btn btn-danger">
+          <p class="text-white">Log Out</p>
+        </button></center>
+    </form>
+    <h5 class="ui horizontal divider header text-primary">
+      MAIN
+    </h5>
+
+    <ul class="nav flex-column bg-white mb-0">
+      <li class="nav-item">
+        <a href="/dashboard" class="nav-link text-dark font-italic">
+          <i class="home icon"></i>
+          Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/billing" class="nav-link text-dark font-italic">
+          <i class="rupee sign icon"></i>
+          Bill
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/orders" class="nav-link active">
+          <i class="eye icon"></i>
+          View Orders
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/viewstocks" class="nav-link text-dark font-italic">
+          <i class="tags icon"></i>
+          View Stocks
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/stocks" class="nav-link text-dark font-italic">
+          <i class="plus circle icon"></i>
+          Add Stock
+        </a>
+      </li>
+    </ul>
+
+    <h5 class="ui horizontal divider header text-primary">
+      CUSTOMIZE
+    </h5>
+
+    <ul class="nav flex-column bg-white mb-0">
+      <li class="nav-item">
+        <a href="/brands" class="nav-link text-dark font-italic">
+          <i class="yelp icon"></i>
+          Brand
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/categories" class="nav-link text-dark font-italic">
+          <i class="bookmark icon"></i>
+          Category
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/sizes" class="nav-link text-dark font-italic">
+          <i class="check square icon"></i>
+          Size
+        </a>
+      </li>
+    </ul>
+
+    <h5 class="ui horizontal divider header text-primary">
+      FILTERS
+    </h5>
+
+    <ul class="nav flex-column bg-white mb-0">
+      <li class="nav-item">
+        <a href="/sales_filter" class="nav-link text-dark font-italic">
+          <i class="yelp icon"></i>
+          Sales
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/stock_filter" class="nav-link text-dark font-italic">
+          <i class="bookmark icon"></i>
+          Stock
+        </a>
+      </li>
+    </ul>
+
+    <!-- Add AI Features section -->
+    <h5 class="ui horizontal divider header text-primary">
+      AI FEATURES
+    </h5>
+
+    <ul class="nav flex-column bg-white mb-0">
+      <li class="nav-item">
+        <a href="/sales-forecast" class="nav-link text-dark font-italic">
+          <i class="chart line icon"></i>
+          Sales Forecast
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/top-selling-prediction" class="nav-link text-dark">
+          <i class="trophy icon"></i>
+          Top Selling Items
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/inventory-optimization" class="nav-link text-dark font-italic">
+          <i class="box icon"></i>
+          Inventory Optimization
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- End vertical navbar -->
+
+  <!-- Page content holder -->
+  <div class="page-content p-5" id="content">
+    <!-- Toggle button -->
+    <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4">
+      <i class="align justify icon"></i>
+      <small class="text-uppercase font-weight-bold">Menu</small>
+    </button>
+
+    <!-- Page content -->
+    <div class="order-summary">
+      <h1>Order Summary</h1>
+    </div>
+
+    <center><img class="ui medium rounded image" src="flower.svg"></center>
+    <br>
+    <form action="/orders_query" method="POST" id="searchForm" class="mb-4">
+      <div class="ui four column grid">
+        <div class="row">
+          <div class="column">
+            <h3>View Orders By</h3>
+          </div>
+
+          <div class="column">
+            <div class="form-check form-check-inline form-switch">
+              <input class="form-check-input" type="radio" name="exampleRadios" id="monthRadio" value="month" 
+                onclick="enableMonthYear('month')">
+              <label class="form-check-label" for="monthRadio">
+                Month
+              </label>
+            </div>
+            <div class="form-check form-check-inline form-switch">
+              <input class="form-check-input" type="radio" name="exampleRadios" id="yearRadio" value="year"
+                onclick="enableMonthYear('year')">
+              <label class="form-check-label" for="yearRadio">
+                Year
+              </label>
+            </div>
+          </div>
+          <div class="column">
+            <select class="form-select" id="month" name="selected_month" disabled required>
+              <option value="">Select Month</option>
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6">June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+          </div>
+          <div class="column">
+            <select class="form-select" id="year" name="selected_year" disabled required>
+              <option value="">Select Year</option>
+              <option value="2021">2021</option>
+              <option value="2022">2022</option>
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <br>
+      <center>
+        <div class="ui left corner labeled action input">
+          <button class="btn btn-primary" type="submit">
+            <i class="search icon"></i>
+            Search
+          </button>
+        </div>
+      </center>
+    </form>
+
+    <script>
+    // Initialize the form on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get references to form elements
+      const monthRadio = document.getElementById('monthRadio');
+      const yearRadio = document.getElementById('yearRadio');
+      const monthSelect = document.getElementById('month');
+      const yearSelect = document.getElementById('year');
+      const form = document.getElementById('searchForm');
+      
+      // Initialize form state on page load
+      if (window.location.href.includes('selected_item=month')) {
+        enableMonthYear('month');
+      } else if (window.location.href.includes('selected_item=year')) {
+        enableMonthYear('year');
+      }
+      
+      // Add event listeners for form validation
+      form.addEventListener('submit', function(e) {
+        // If no radio button is selected, show error
+        if (!monthRadio.checked && !yearRadio.checked) {
+          e.preventDefault();
+          alert('Please select either Month or Year filter type');
+          return false;
+        }
+        
+        // If year radio is selected but no year value
+        if (yearRadio.checked && !yearSelect.value) {
+          e.preventDefault();
+          alert('Please select a year');
+          return false;
+        }
+        
+        // If month radio is selected but missing month or year
+        if (monthRadio.checked && (!monthSelect.value || !yearSelect.value)) {
+          e.preventDefault();
+          if (!monthSelect.value) alert('Please select a month');
+          if (!yearSelect.value) alert('Please select a year');
+          return false;
+        }
+        
+        return true;
+      });
+    });
+
+    function enableMonthYear(type) {
+      const monthSelect = document.getElementById('month');
+      const yearSelect = document.getElementById('year');
+      const monthRadio = document.getElementById('monthRadio');
+      const yearRadio = document.getElementById('yearRadio');
+      const monthLabel = document.querySelector('label[for="monthRadio"]');
+      const yearLabel = document.querySelector('label[for="yearRadio"]');
+      
+      // Remove active class from both
+      monthLabel.classList.remove('filter-active');
+      yearLabel.classList.remove('filter-active');
+      
+      if (type === 'month') {
+        // Enable month selection
+        monthSelect.disabled = false;
+        yearSelect.disabled = false;
+        monthSelect.required = true;
+        yearSelect.required = true;
+        monthRadio.checked = true;
+        yearRadio.checked = false;
+        // Add visual feedback
+        monthLabel.classList.add('filter-active');
+      } else if (type === 'year') {
+        // Enable year selection only
+        monthSelect.disabled = true;
+        yearSelect.disabled = false;
+        monthSelect.required = false;
+        yearSelect.required = true;
+        monthSelect.value = '';
+        monthRadio.checked = false;
+        yearRadio.checked = true;
+        // Add visual feedback
+        yearLabel.classList.add('filter-active');
+      }
+    }
+    </script>
+
+    <% if(typeof selected_item === 'undefined' || selected_item === 'None') { %>
+      <% if(orders && orders.length > 0) { %>
+        <% orders.forEach(function(order){ %>
+          <br>
+          <div class="ui styled fluid accordion">
+            <div class="title text-primary">
+              <i class="dropdown icon"></i>
+
+              <div class="container">
+                <div class="row-lg">
+                  <div class="col-lg">
+                    <p class="text-primary">Order ID: <i>
+                        <%= order.TransactionID %>
+                      </i> </p>
+                  </div>
+                  <div class="col-lg">
+                    <p class="text-danger"> Total Amount: <i><i class="rupee sign icon"></i>
+                        <%= order.Amount %>
+                      </i></p>
+                  </div>
+                </div>
+                <div class="row-lg">
+                  <div class="col-lg">
+                    <p class="text-success">Date: <i>
+                        <%= order.TransactionDate %>
+                      </i></p>
+                  </div>
+                  <div class="col-lg">
+                    <p class="text-dark">Time: <i>
+                        <%= order.TransactionTime %>
+                      </i></p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="content">
+              <table class="ui inverted violet table table-bordered">
+                <thead>
+                  <tr class="table-success">
+                    <th>Item ID</th>
+                    <th>Item Name</th>
+                    <th>Category</th>
+                    <th>Brand Name</th>
+                    <th>Size</th>
+                    <th>Amount</th>
+                    <th>Customer Number</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (typeof sub_orders !== 'undefined' && sub_orders) { %>
+                    <% sub_orders.filter(function(s) { 
+                         return (s && order && 
+                                s.TransactionID && order.TransactionID && 
+                                s.TransactionID.toString() === order.TransactionID.toString());
+                       }).forEach(function(sub_order){ %>
+                      <tr style="background: linear-gradient(to left, #0066eb 0%, #ff8ab3 68%);">
+                        <td><%= sub_order.ItemID %></td>
+                        <td><%= sub_order.ItemName %></td>
+                        <td><%= sub_order.Category %></td>
+                        <td><%= sub_order.Brand %></td>
+                        <td><%= sub_order.Size %></td>
+                        <td><i class="rupee sign icon"></i><%= sub_order.Amount %></td>
+                        <td><%= sub_order.CustomerNumber %></td>
+                        <td>
+                          <form action="/deleteitem" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                            <input type="hidden" name="deleteid" value="<%= sub_order.ItemID %>">
+                            <button type="submit" class="ui red button">
+                              <i class="trash icon"></i> Delete
+                            </button>
+                          </form>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  <% } else { %>
+                    <tr>
+                      <td colspan="8" class="text-center">No sub-orders found</td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="alert alert-info" role="alert">
+          No orders found. Please select a filter or add new orders.
+        </div>
+      <% } %>
+    <% } %>
+
+    <% if(selected_item === 'month' && display_content && display_content.length > 0) { %>
+      <h2 class="text-primary">Showing Orders for <%= month_name %>, <%= year %></h2>
+      <% orders.forEach(function(order){ %>
+        <br>
+        <div class="ui styled fluid accordion">
+          <div class="title text-primary">
+            <i class="dropdown icon"></i>
+            <div class="container">
+              <div class="row-lg">
+                <div class="col-lg">
+                  <p class="text-primary">Order ID: <i><%= order.TransactionID %></i></p>
+                </div>
+                <div class="col-lg">
+                  <p class="text-danger">Total Amount: <i><i class="rupee sign icon"></i><%= order.Amount %></i></p>
+                </div>
+              </div>
+              <div class="row-lg">
+                <div class="col-lg">
+                  <p class="text-success">Date: <i><%= order.TransactionDate %></i></p>
+                </div>
+                <div class="col-lg">
+                  <p class="text-dark">Time: <i><%= order.TransactionTime %></i></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="content">
+            <table class="ui inverted violet table table-bordered">
+              <thead>
+                <tr class="table-success">
+                  <th>Item ID</th>
+                  <th>Item Name</th>
+                  <th>Category</th>
+                  <th>Brand Name</th>
+                  <th>Size</th>
+                  <th>Amount</th>
+                  <th>Customer Number</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (typeof sub_orders !== 'undefined' && sub_orders) { %>
+                  <% sub_orders.filter(function(s) { 
+                       return (s && order && 
+                              s.TransactionID && order.TransactionID && 
+                              s.TransactionID.toString() === order.TransactionID.toString());
+                     }).forEach(function(sub_order){ %>
+                    <tr style="background: linear-gradient(to left, #0066eb 0%, #ff8ab3 68%);">
+                      <td><%= sub_order.ItemID %></td>
+                      <td><%= sub_order.ItemName %></td>
+                      <td><%= sub_order.Category %></td>
+                      <td><%= sub_order.Brand %></td>
+                      <td><%= sub_order.Size %></td>
+                      <td><i class="rupee sign icon"></i><%= sub_order.Amount %></td>
+                      <td><%= sub_order.CustomerNumber %></td>
+                      <td>
+                        <form action="/deleteitem" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                          <input type="hidden" name="deleteid" value="<%= sub_order.ItemID %>">
+                          <button type="submit" class="ui red button">
+                            <i class="trash icon"></i> Delete
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="8" class="text-center">No sub-orders found</td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <% if(selected_item === 'year' && display_content && display_content.length > 0) { %>
+      <h2 class="text-primary">Showing Orders for <%= year %></h2>
+      <% orders.forEach(function(order){ %>
+        <br>
+        <div class="ui styled fluid accordion">
+          <div class="title text-primary">
+            <i class="dropdown icon"></i>
+            <div class="container">
+              <div class="row-lg">
+                <div class="col-lg">
+                  <p class="text-primary">Order ID: <i><%= order.TransactionID %></i></p>
+                </div>
+                <div class="col-lg">
+                  <p class="text-danger">Total Amount: <i><i class="rupee sign icon"></i><%= order.Amount %></i></p>
+                </div>
+              </div>
+              <div class="row-lg">
+                <div class="col-lg">
+                  <p class="text-success">Date: <i><%= order.TransactionDate %></i></p>
+                </div>
+                <div class="col-lg">
+                  <p class="text-dark">Time: <i><%= order.TransactionTime %></i></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="content">
+            <table class="ui inverted violet table table-bordered">
+              <thead>
+                <tr class="table-success">
+                  <th>Item ID</th>
+                  <th>Item Name</th>
+                  <th>Category</th>
+                  <th>Brand Name</th>
+                  <th>Size</th>
+                  <th>Amount</th>
+                  <th>Customer Number</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (typeof sub_orders !== 'undefined' && sub_orders) { %>
+                  <% sub_orders.filter(function(s) { 
+                       return (s && order && 
+                              s.TransactionID && order.TransactionID && 
+                              s.TransactionID.toString() === order.TransactionID.toString());
+                     }).forEach(function(sub_order){ %>
+                    <tr style="background: linear-gradient(to left, #0066eb 0%, #ff8ab3 68%);">
+                      <td><%= sub_order.ItemID %></td>
+                      <td><%= sub_order.ItemName %></td>
+                      <td><%= sub_order.Category %></td>
+                      <td><%= sub_order.Brand %></td>
+                      <td><%= sub_order.Size %></td>
+                      <td><i class="rupee sign icon"></i><%= sub_order.Amount %></td>
+                      <td><%= sub_order.CustomerNumber %></td>
+                      <td>
+                        <form action="/deleteitem" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                          <input type="hidden" name="deleteid" value="<%= sub_order.ItemID %>">
+                          <button type="submit" class="ui red button">
+                            <i class="trash icon"></i> Delete
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="8" class="text-center">No sub-orders found</td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <% if (typeof time_type !== 'undefined' && time_type == 'month') { %>
+      <div class="order-card">
+        <div class="card-header">
+          <h2 class="mb-0">Orders for <%= month_name %> <%= year %></h2>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr class="table-header">
+                  <th>Date</th>
+                  <th>Transaction ID</th>
+                  <th>Item ID</th>
+                  <th>Brand</th>
+                  <th>Category</th>
+                  <th>Size</th>
+                  <th>Quantity</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% display_content.forEach(function(order){ %>
+                  <tr>
+                    <td><%= order.TransactionDate %></td>
+                    <td><%= order.TransactionID %></td>
+                    <td><%= order.ItemID %></td>
+                    <td><%= order.Brand %></td>
+                    <td><%= order.Category %></td>
+                    <td><%= order.Size %></td>
+                    <td><%= order.Quantity %></td>
+                    <td><i class="rupee sign icon"></i><%= order.Amount %></td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <% if (typeof time_type !== 'undefined' && time_type == 'year') { %>
+      <div class="order-card">
+        <div class="card-header">
+          <h2 class="mb-0">Orders for <%= year %></h2>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr class="table-header">
+                  <th>Month</th>
+                  <th>Transaction ID</th>
+                  <th>Item ID</th>
+                  <th>Brand</th>
+                  <th>Category</th>
+                  <th>Size</th>
+                  <th>Quantity</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% display_content.forEach(function(order){ %>
+                  <tr>
+                    <td><%= monthNames[parseInt(order.TMonth)-1] %></td>
+                    <td><%= order.TransactionID %></td>
+                    <td><%= order.ItemID %></td>
+                    <td><%= order.Brand %></td>
+                    <td><%= order.Category %></td>
+                    <td><%= order.Size %></td>
+                    <td><%= order.Quantity %></td>
+                    <td><i class="rupee sign icon"></i><%= order.Amount %></td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <% if (typeof time_type !== 'undefined' && time_type != '') { %>
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="order-card">
+            <div class="card-header">
+              <h3 class="mb-0">Order Summary</h3>
+            </div>
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h4 class="text-primary mb-0">Total Orders</h4>
+                  <p class="text-muted">Number of transactions</p>
+                </div>
+                <h2 class="mb-0"><%= total_orders %></h2>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="order-card">
+            <div class="card-header">
+              <h3 class="mb-0">Revenue</h3>
+            </div>
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h4 class="text-success mb-0">Total Amount</h4>
+                  <p class="text-muted">Revenue generated</p>
+                </div>
+                <h2 class="mb-0"><i class="rupee sign icon"></i><%= total_amount %></h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Orders Table -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Orders</h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Transaction ID</th>
+                <th>Item ID</th>
+                <th>Brand</th>
+                <th>Category</th>
+                <th>Size</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (display_content && display_content.length > 0) { %>
+                <% display_content.forEach(function(order){ %>
+                  <tr>
+                    <td><%= order.TransactionDate %></td>
+                    <td><%= order.TransactionID %></td>
+                    <td><%= order.ItemID %></td>
+                    <td><%= order.Brand %></td>
+                    <td><%= order.Category %></td>
+                    <td><%= order.Size %></td>
+                    <td><%= order.Quantity %></td>
+                    <td><i class="rupee sign icon"></i><%= order.Amount %></td>
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr>
+                  <td colspan="8" class="text-center">No orders found for the selected criteria</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+    crossorigin="anonymous"></script>
+  <!-- Semnatic-UI Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+  <script>
+    $(function () {
+      // Sidebar toggle behavior
+      $('#sidebarCollapse').on('click', function () {
+        $('#sidebar, #content').toggleClass('active');
+      });
+    });
+  </script>
+
+  <script language='javascript'>
+    $(document).ready(function () {
+      $('.ui.accordion').accordion();
+    });
+  </script>
+
+</body>
+
+</html>

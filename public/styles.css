@@ -1,0 +1,266 @@
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+
+:root {
+  --primary-color: #4a6da7;
+  --primary-light: #eef2f7;
+  --secondary-color: #6c757d;
+  --accent-color: #5d9cec;
+  --success-color: #5cb85c;
+  --warning-color: #f0ad4e;
+  --danger-color: #d9534f;
+  --info-color: #5bc0de;
+  --text-dark: #2c3e50;
+  --text-light: #ffffff;
+  --border-color: #e0e0e0;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+body {
+  background-color: #f8f9fa;
+  color: var(--text-dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Sidebar Navigation Styles */
+.vertical-nav {
+  min-width: 17rem;
+  width: 17rem;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-shadow: 3px 3px 10px var(--shadow-color);
+  transition: all 0.4s;
+  z-index: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--primary-light);
+}
+
+/* Webkit scrollbar styles */
+.vertical-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.vertical-nav::-webkit-scrollbar-track {
+  background: var(--primary-light);
+  border-radius: 3px;
+}
+
+.vertical-nav::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 3px;
+}
+
+/* Make the header section fixed */
+.vertical-nav .header-section {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 2;
+  padding-bottom: 1rem;
+}
+
+/* Add padding to the content to prevent overlap with fixed header */
+.vertical-nav .nav-content {
+  padding-bottom: 2rem;
+}
+
+.nav-item .nav-link {
+  transition: all 0.3s ease;
+  border-radius: 5px;
+  margin: 2px 8px;
+  padding: 10px 15px;
+  color: var(--text-dark);
+}
+
+.nav-item .nav-link:hover {
+  background: linear-gradient(135deg, rgba(74, 109, 167, 0.1) 0%, rgba(74, 109, 167, 0.2) 100%);
+  color: var(--primary-color) !important;
+  transform: translateX(5px);
+  box-shadow: 0 2px 5px rgba(74, 109, 167, 0.1);
+}
+
+.nav-item .nav-link.active {
+  background: linear-gradient(135deg, rgba(74, 109, 167, 0.2) 0%, rgba(74, 109, 167, 0.3) 100%);
+  color: var(--primary-color) !important;
+  font-weight: 500;
+}
+
+.nav-item .nav-link i {
+  transition: all 0.3s ease;
+  margin-right: 8px;
+}
+
+.nav-item .nav-link:hover i {
+  transform: translateX(3px);
+  color: var(--primary-color);
+}
+
+/* Page Content Styles */
+.page-content {
+  width: calc(100% - 17rem);
+  margin-left: 17rem;
+  transition: all 0.4s;
+  background-color: var(--primary-light);
+  min-height: 100vh;
+}
+
+/* Sidebar Toggle States */
+#sidebar.active {
+  margin-left: -17rem;
+}
+
+#content.active {
+  width: 100%;
+  margin: 0;
+}
+
+/* Common UI Elements */
+.text-primary {
+  color: var(--primary-color) !important;
+}
+
+.bg-primary {
+  background-color: var(--primary-color) !important;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: #3c5a8c;
+  border-color: #3c5a8c;
+}
+
+/* Card Styles */
+.card {
+  border: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+}
+
+.card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+}
+
+/* Table Styles */
+.table-hover tbody tr:hover {
+  background-color: var(--primary-light);
+}
+
+/* Utility Classes */
+.container {
+  background-color: transparent;
+}
+
+.delete-btn {
+  background: var(--danger-color);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  #sidebar {
+    margin-left: -17rem;
+  }
+  #sidebar.active {
+    margin-left: 0;
+  }
+  #content {
+    width: 100%;
+    margin: 0;
+  }
+  #content.active {
+    margin-left: 17rem;
+    width: calc(100% - 17rem);
+  }
+}
+
+/*
+*
+* ==========================================
+* CUSTOM COMPONENTS
+* ==========================================
+*
+*/
+
+.separator {
+  margin: 3rem 0;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.text-uppercase {
+  letter-spacing: 0.1em;
+}
+
+.text-gray {
+  color: var(--secondary-color);
+}
+
+#pdf {
+  text-align: center;
+}
+
+#pdf canvas {
+  border: 1px solid var(--border-color);
+  width: 95%;
+}
+
+/*
+*
+* ==========================================
+* FOR DEMO PURPOSE
+* ==========================================
+*
+*/
+/*   
+  body {
+    background: #599fd9;
+    background: -webkit-linear-gradient(to right, #599fd9, #c2e59c);
+    background: linear-gradient(to right, #599fd9, #c2e59c);
+    min-height: 100vh;
+    overflow-x: hidden;
+  } */
+  
+  .separator {
+    margin: 3rem 0;
+    border-bottom: 1px dashed #fff;
+  }
+  
+  .text-uppercase {
+    letter-spacing: 0.1em;
+  }
+  
+  .text-gray {
+    color: #aaa;
+  }
+  
+  a:hover {
+    background: linear-gradient(to right, #00ebb0 26%, #b016da 91%);
+    }
+
+    #pdf {
+      text-align: center;
+    }
+    
+    #pdf canvas {
+      border: 1px solid black;
+      width: 95%;
+    }
+
+    

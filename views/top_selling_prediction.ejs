@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--Custom CSS-->
+  <link rel="stylesheet" href="styles.css">
+  <!-- Semantic UI CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Top Selling Items Prediction</title>
+  <style>
+    .insight-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+      transition: all 0.3s ease;
+    }
+
+    .insight-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    .prediction-period {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      margin-right: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .prediction-period.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .prediction-period:not(.active) {
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+    }
+
+    .prediction-period:hover:not(.active) {
+      background-color: rgba(74, 109, 167, 0.2);
+    }
+
+    .product-table th {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .confidence-indicator {
+      height: 10px;
+      border-radius: 5px;
+      background: linear-gradient(90deg, #4a6da7 var(--confidence), #e9ecef var(--confidence));
+    }
+
+    .chart-wrapper {
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+      margin-bottom: 1.5rem;
+    }
+    
+    .table th {
+      padding: 10px 15px !important;
+      font-size: 0.95rem;
+    }
+    
+    .table td {
+      padding: 8px 15px !important;
+      font-size: 0.9rem;
+    }
+    
+    .progress {
+      height: 16px;
+    }
+    
+    @media (max-width: 768px) {
+      .chart-container {
+        width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!--Vertical Navbar-->
+  <div class="vertical-nav bg-white" id="sidebar">
+    <div class="header-section">
+      <div class="py-4 px-3 mb-4" style="background: linear-gradient(135deg, #4a6da7, #2c4b81); border-bottom: 3px solid #1c3563;">
+        <div class="media d-flex align-items-center">
+          <img src="iism.png" alt="IIMS Logo" width="70" class="mr-3 rounded-circle img-thumbnail shadow-sm" style="border: 2px solid white; padding: 2px;">
+          &emsp;<div class="media-body">
+            <h4 class="m-0 text-light" style="font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);"><shop-name></h4>
+            <p class="font-weight-light text-white mb-0" style="font-size: 0.85rem; opacity: 0.9;">Intelligent Inventory Management System</p>
+          </div>
+        </div>
+      </div>
+      <form action="/logout?_method=DELETE" method="POST">
+        <center><button type="submit" class="btn btn-danger"><p class="text-white">Log Out</p></button></center>
+      </form>
+    </div>
+    
+    <div class="nav-content">
+      <h5 class="ui horizontal divider header text-primary">MAIN</h5>
+      <ul class="nav flex-column bg-white mb-0">
+        <li class="nav-item">
+          <a href="/" class="nav-link text-dark">
+            <i class="home icon"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/billing" class="nav-link text-dark">
+            <i class="rupee sign icon"></i>
+            Bill
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/orders" class="nav-link text-dark">
+            <i class="eye icon"></i>
+            View Orders
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/viewstocks" class="nav-link text-dark">
+            <i class="tags icon"></i>
+            View Stocks
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/stocks" class="nav-link text-dark">
+            <i class="plus circle icon"></i>
+            Add Stock
+          </a>
+        </li>
+      </ul>
+
+      <h5 class="ui horizontal divider header text-primary">CUSTOMIZE</h5>
+      <ul class="nav flex-column bg-white mb-0">
+        <li class="nav-item">
+          <a href="/brands" class="nav-link text-dark">
+            <i class="yelp icon"></i>
+            Brand
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/categories" class="nav-link text-dark">
+            <i class="bookmark icon"></i>
+            Category
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/sizes" class="nav-link text-dark">
+            <i class="check square icon"></i>
+            Size
+          </a>
+        </li>
+      </ul>
+
+      <h5 class="ui horizontal divider header text-primary">FILTERS</h5>
+      <ul class="nav flex-column bg-white mb-0">
+        <li class="nav-item">
+          <a href="/sales_filter" class="nav-link text-dark">
+            <i class="yelp icon"></i>
+            Sales
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/stock_filter" class="nav-link text-dark">
+            <i class="bookmark icon"></i>
+            Stock
+          </a>
+        </li>
+      </ul>
+
+      <h5 class="ui horizontal divider header text-primary">AI FEATURES</h5>
+      <ul class="nav flex-column bg-white mb-0">
+        <li class="nav-item">
+          <a href="/sales-forecast" class="nav-link text-dark">
+            <i class="chart line icon"></i>
+            Sales Forecast
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/top-selling-prediction" class="nav-link active">
+            <i class="trophy icon"></i>
+            Top Selling Items
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/inventory-optimization" class="nav-link text-dark">
+            <i class="box icon"></i>
+            Inventory Optimization
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- End vertical navbar -->
+
+  <!-- Page content holder -->
+  <div class="page-content p-5" id="content">
+    <!-- Toggle button -->
+    <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4">
+      <i class="align justify icon"></i>
+      <small class="text-uppercase font-weight-bold">Menu</small>
+    </button>
+
+    <!-- Page content -->
+    <div class="container">
+      <h1 class="display-4 mb-4">Top Selling Items Prediction</h1>
+      <p class="lead text-muted mb-4">AI-powered analysis of your best-selling products and future predictions</p>
+
+      <!-- Best Sellers Section -->
+      <div class="row mb-5">
+        <div class="col-12">
+          <div class="insight-card">
+            <h2 class="mb-4">
+              <i class="trophy icon text-warning"></i>
+              Historical Best Sellers
+            </h2>
+            <div class="table-responsive">
+              <table class="table table-hover product-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Brand</th>
+                    <th>Category</th>
+                    <th>Total Sales</th>
+                    <th>Revenue (₹)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (typeof bestSellers !== 'undefined' && bestSellers.length > 0) { %>
+                    <% bestSellers.forEach((product, index) => { %>
+                      <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= product.name %></td>
+                        <td><%= product.brand %></td>
+                        <td><%= product.category %></td>
+                        <td><%= product.totalSales %></td>
+                        <td>₹<%= product.revenue.toFixed(2) %></td>
+                      </tr>
+                    <% }); %>
+                  <% } else { %>
+                    <tr>
+                      <td colspan="6" class="text-center">No data available</td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sales Prediction Section -->
+      <div class="row">
+        <div class="col-12">
+          <div class="insight-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h2>
+                <i class="chart line icon text-primary"></i>
+                Sales Predictions
+              </h2>
+              <div class="prediction-periods">
+                <span class="prediction-period active" data-days="7">7 Days</span>
+                <span class="prediction-period" data-days="14">14 Days</span>
+                <span class="prediction-period" data-days="30">30 Days</span>
+              </div>
+            </div>
+            
+            <div id="prediction-7" class="prediction-container">
+              <div class="table-responsive">
+                <table class="table table-hover prediction-table">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Product</th>
+                      <th>Brand</th>
+                      <th>Category</th>
+                      <th>Predicted Sales</th>
+                      <th>Confidence</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (typeof bestSellers !== 'undefined' && bestSellers.length > 0) { %>
+                      <% 
+                        // Sort by 7-day prediction
+                        const sorted7Days = [...bestSellers].sort((a, b) => b.prediction7Days - a.prediction7Days);
+                        sorted7Days.forEach((product, index) => { 
+                      %>
+                        <tr>
+                          <td><%= index + 1 %></td>
+                          <td><%= product.name %></td>
+                          <td><%= product.brand %></td>
+                          <td><%= product.category %></td>
+                          <td><%= product.prediction7Days %></td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="progress w-100">
+                                <div class="progress-bar bg-primary" role="progressbar" 
+                                     style="width: <%= product.confidence %>%" 
+                                     aria-valuenow="<%= product.confidence %>" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                  <%= product.confidence %>%
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="6" class="text-center">No prediction data available</td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div id="prediction-14" class="prediction-container" style="display: none;">
+              <div class="table-responsive">
+                <table class="table table-hover prediction-table">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Product</th>
+                      <th>Brand</th>
+                      <th>Category</th>
+                      <th>Predicted Sales</th>
+                      <th>Confidence</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (typeof bestSellers !== 'undefined' && bestSellers.length > 0) { %>
+                      <% 
+                        // Sort by 14-day prediction
+                        const sorted14Days = [...bestSellers].sort((a, b) => b.prediction14Days - a.prediction14Days);
+                        sorted14Days.forEach((product, index) => { 
+                      %>
+                        <tr>
+                          <td><%= index + 1 %></td>
+                          <td><%= product.name %></td>
+                          <td><%= product.brand %></td>
+                          <td><%= product.category %></td>
+                          <td><%= product.prediction14Days %></td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="progress w-100">
+                                <div class="progress-bar bg-primary" role="progressbar" 
+                                     style="width: <%= product.confidence %>%" 
+                                     aria-valuenow="<%= product.confidence %>" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                  <%= product.confidence %>%
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="6" class="text-center">No prediction data available</td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div id="prediction-30" class="prediction-container" style="display: none;">
+              <div class="table-responsive">
+                <table class="table table-hover prediction-table">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Product</th>
+                      <th>Brand</th>
+                      <th>Category</th>
+                      <th>Predicted Sales</th>
+                      <th>Confidence</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (typeof bestSellers !== 'undefined' && bestSellers.length > 0) { %>
+                      <% 
+                        // Sort by 30-day prediction
+                        const sorted30Days = [...bestSellers].sort((a, b) => b.prediction30Days - a.prediction30Days);
+                        sorted30Days.forEach((product, index) => { 
+                      %>
+                        <tr>
+                          <td><%= index + 1 %></td>
+                          <td><%= product.name %></td>
+                          <td><%= product.brand %></td>
+                          <td><%= product.category %></td>
+                          <td><%= product.prediction30Days %></td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="progress w-100">
+                                <div class="progress-bar bg-primary" role="progressbar" 
+                                     style="width: <%= product.confidence %>%" 
+                                     aria-valuenow="<%= product.confidence %>" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                  <%= product.confidence %>%
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="6" class="text-center">No prediction data available</td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Top Products Chart -->
+            <div class="mt-5 chart-wrapper">
+              <div class="row">
+                <div class="col-md-8">
+                  <h5 class="mb-3 text-center text-muted">Sales Comparison</h5>
+                  <div class="chart-container" style="position: relative; height:280px; width:90%; margin: 0 auto;">
+                    <canvas id="topProductsChart"></canvas>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <h5 class="mb-3 text-center text-muted">Category Distribution</h5>
+                  <div class="chart-container" style="position: relative; height:280px; width:100%; margin: 0 auto;">
+                    <canvas id="categoryPieChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Semantic UI Scripts-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    $(document).ready(function() {
+      // Sidebar toggle behavior
+      $('#sidebarCollapse').on('click', function() {
+        $('#sidebar, #content').toggleClass('active');
+      });
+
+      // Prediction period toggle
+      $('.prediction-period').click(function() {
+        $('.prediction-period').removeClass('active');
+        $(this).addClass('active');
+        
+        const days = $(this).data('days');
+        $('.prediction-container').hide();
+        $(`#prediction-${days}`).show();
+        
+        // Update charts based on the selected period
+        updateCharts(days);
+      });
+
+      // Initialize chart variables
+      const ctx = document.getElementById('topProductsChart').getContext('2d');
+      const pieCtx = document.getElementById('categoryPieChart').getContext('2d');
+      let topProductsChart;
+      let categoryPieChart;
+
+      function updateCharts(days) {
+        try {
+          // Destroy previous charts if they exist
+          if (topProductsChart) {
+            topProductsChart.destroy();
+          }
+          if (categoryPieChart) {
+            categoryPieChart.destroy();
+          }
+
+          <% if (typeof bestSellers !== 'undefined' && bestSellers.length > 0) { %>
+            // Get the data
+            const bestSellersData = <%- JSON.stringify(bestSellers) %>;
+            console.log('Raw Data:', bestSellersData);
+
+            // Sort and get top 5 for bar chart
+            const predictionKey = `prediction${days}Days`;
+            const sortedProducts = bestSellersData
+              .sort((a, b) => b[predictionKey] - a[predictionKey])
+              .slice(0, 5);
+
+            // Bar chart data
+            const barLabels = sortedProducts.map(p => p.name);
+            const historicalData = sortedProducts.map(p => p.totalSales);
+            const predictedData = sortedProducts.map(p => p[predictionKey]);
+
+            // Category data for pie chart
+            const categoryTotals = {};
+            bestSellersData.forEach(product => {
+              const category = product.category;
+              categoryTotals[category] = (categoryTotals[category] || 0) + parseInt(product.totalSales || 0);
+            });
+
+            console.log('Bar Chart Data:', { barLabels, historicalData, predictedData });
+            console.log('Category Totals:', categoryTotals);
+
+            // Create bar chart
+            topProductsChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: barLabels,
+                datasets: [
+                  {
+                    label: 'Historical Sales',
+                    data: historicalData,
+                    backgroundColor: 'rgba(74, 109, 167, 0.5)'
+                  },
+                  {
+                    label: `${days}-Day Prediction`,
+                    data: predictedData,
+                    backgroundColor: 'rgba(242, 120, 75, 0.5)'
+                  }
+                ]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false
+              }
+            });
+
+            // Create doughnut chart
+            categoryPieChart = new Chart(pieCtx, {
+              type: 'doughnut',
+              data: {
+                labels: Object.keys(categoryTotals),
+                datasets: [{
+                  data: Object.values(categoryTotals),
+                  backgroundColor: [
+                    '#4a6da7',
+                    '#f2784b',
+                    '#26a69a',
+                    '#9c27b0',
+                    '#ffc107',
+                    '#e91e63'
+                  ]
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: 'bottom'
+                  }
+                }
+              }
+            });
+          <% } %>
+        } catch (error) {
+          console.error('Error updating charts:', error);
+        }
+      }
+
+      // Initialize with 7-day prediction
+      try {
+        updateCharts(7);
+      } catch (error) {
+        console.error('Error initializing charts:', error);
+      }
+    });
+  </script>
+</body>
+</html>

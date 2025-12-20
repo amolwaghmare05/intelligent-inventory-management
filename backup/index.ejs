@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--Custom CSS-->
+  <link rel="stylesheet" href="styles.css">
+  <!-- Semantic UI CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <title>IIMS</title>
+
+</head>
+<body>
+  <!--Vertical Navbar-->
+  <div class="vertical-nav bg-white" id="sidebar">
+    <div class="header-section">
+      <div class="py-4 px-3 mb-4" style="background: linear-gradient(135deg, #4a6da7, #2c4b81); border-bottom: 3px solid #1c3563;">
+        <div class="media d-flex align-items-center">
+          <img src="iism.png" alt="IIMS Logo" width="70" class="mr-3 rounded-circle img-thumbnail shadow-sm" style="border: 2px solid white; padding: 2px;">
+          &emsp;<div class="media-body">
+            <h4 class="m-0 text-light" style="font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);"><shop-name></h4>
+            <p class="font-weight-light text-white mb-0" style="font-size: 0.85rem; opacity: 0.9;">Intelligent Inventory Management System<p>
+          </div>
+        </div>
+      </div>
+      <form action="/logout?_method=DELETE" method="POST">
+        <center><button type="submit" class="btn btn-danger"><p class="text-white">Log Out</p></button></center>
+      </form>
+    </div>
+
+    <div class="nav-content">
+      <h5 class="ui horizontal divider header text-primary">
+        MAIN
+      </h5>
+    
+      <ul class="nav flex-column bg-white mb-0">
+        <li class="nav-item">
+          <a href="/dashboard" class="nav-link active">
+            <i class="home icon"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/billing" class="nav-link text-dark font-italic">
+            <i class="rupee sign icon"></i>
+            Bill
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/orders" class="nav-link text-dark font-italic">
+            <i class="eye icon"></i>
+            View Orders
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/viewstocks" class="nav-link text-dark font-italic">
+            <i class="tags icon"></i>
+            View Stocks
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/stocks" class="nav-link text-dark font-italic">
+            <i class="plus circle icon"></i>
+            Add Stock
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <h5 class="ui horizontal divider header text-primary">
+      CUSTOMIZE
+    </h5>
+  
+    <ul class="nav flex-column bg-white mb-0">
+      <li class="nav-item">
+        <a href="/brands" class="nav-link text-dark font-italic">
+          <i class="yelp icon"></i>
+          Brand
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/categories" class="nav-link text-dark font-italic">
+          <i class="bookmark icon"></i>
+          Category
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/sizes" class="nav-link text-dark font-italic">
+          <i class="check square icon"></i>
+          Size
+        </a>
+      </li>
+    </ul>
+  
+    <h5 class="ui horizontal divider header text-primary">
+      FILTERS
+    </h5>
+  
+    <ul class="nav flex-column bg-white mb-0">
+      <li class="nav-item">
+        <a href="/sales_filter" class="nav-link text-dark font-italic">
+          <i class="yelp icon"></i>
+          Sales
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/stock_filter" class="nav-link text-dark font-italic">
+          <i class="bookmark icon"></i>
+          Stock
+        </a>
+      </li>
+    </ul>
+    
+    <!-- Add AI Features section -->
+    <h5 class="ui horizontal divider header text-primary">
+      AI FEATURES
+    </h5>
+
+    <ul class="nav flex-column bg-white mb-0">
+      <li class="nav-item">
+        <a href="/sales-forecast" class="nav-link text-dark">
+          <i class="chart line icon"></i>
+          Sales Forecast
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/top-selling-prediction" class="nav-link text-dark">
+          <i class="trophy icon"></i>
+          Top Selling Items
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+  <!-- End vertical navbar -->
+  
+  <!-- Page content holder -->
+  <div class="page-content p-5" id="content">
+    <!-- Toggle button -->
+    <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4">
+      <i class="align justify icon"></i>
+      <small class="text-uppercase font-weight-bold">Menu</small>
+    </button>
+  
+    <!-- Page content -->
+    <br>
+    <h1 class="mb-4">Dashboard</h1>
+
+    <div class="container">
+      <div class="row g-4 justify-content-center">
+        <div class="col-xl-3 col-lg-3 col-md-6">
+          <div class="ui fluid card text-white bg-success h-100" style="min-height: 120px;">
+            <div class="content">
+              <center>
+                <div class="ui statistic">
+                  <div class="value">
+                    <p class="text-white counter">
+                      <span>&#8377;</span>
+                      <% total_sales.forEach(function(order){ %>
+                        <span class="count-up" data-target="<%= order.TotalItemsOrdered %>">0</span>
+                      <% }); %>
+                    </p>
+                  </div>
+                  <div class="label text-white">Total Sales</div>
+                </div>
+              </center>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3 col-md-6">
+          <div class="ui fluid card text-white bg-primary h-100" style="min-height: 120px;">
+            <div class="content">
+              <center>
+                <div class="ui statistic">
+                  <div class="value">
+                    <p class="text-white">
+                      <i class="shopping cart icon"></i>
+                      <% ord_num.forEach(function(order){ %>
+                        <span class="count-up" data-target="<%= order.NumberOfProducts %>">0</span>
+                      <% }); %>
+                    </p>
+                  </div>
+                  <div class="label text-white">Total Orders</div>
+                </div>
+              </center>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3 col-md-6">
+          <div class="ui fluid card text-dark bg-warning h-100" style="min-height: 120px;">
+            <div class="content">
+              <center>
+                <div class="ui statistic">
+                  <div class="value">
+                    <p class="text-white">
+                      <i class="tags icon"></i>
+                      <% stock_num.forEach(function(order){ %>
+                        <span class="count-up" data-target="<%= order.NumberOfProducts %>">0</span>
+                      <% }); %>
+                    </p>
+                  </div>
+                  <div class="label text-white">Total Stock</div>
+                </div>
+              </center>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3 col-md-6">
+          <div class="ui fluid card text-white bg-info h-100" style="min-height: 120px;">
+            <div class="content">
+              <center>
+                <div class="ui statistic">
+                  <div class="value">
+                    <p class="text-white">
+                      <i class="rupee sign icon"></i>
+                      <% total_stock.forEach(function(order){ %>
+                        <span class="count-up" data-target="<%= order.TotalItemsOrdered %>">0</span>
+                      <% }); %>
+                    </p>
+                  </div>
+                  <div class="label text-white">Total Stock Value</div>
+                </div>
+              </center>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Features section -->
+    <div class="row my-5">
+      <div class="col-12">
+        <h3 class="mb-4 text-primary">AI-Powered Features</h3>
+        <div class="row justify-content-center g-4">
+          <div class="col-md-5 col-lg-4">
+            <div class="card h-100 border-primary shadow-sm hover-card">
+              <div class="card-header bg-primary text-white">
+                <i class="chart line icon"></i> Sales Forecast
+              </div>
+              <div class="card-body d-flex flex-column">
+                <p class="card-text flex-grow-1">Use AI to predict future sales based on historical data.</p>
+                <a href="/sales-forecast" class="btn btn-outline-primary mt-auto">View Forecast</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5 col-lg-4">
+            <div class="card h-100 border-warning shadow-sm hover-card">
+              <div class="card-header bg-warning text-dark">
+                <i class="trophy icon"></i> Top Selling Items
+              </div>
+              <div class="card-body d-flex flex-column">
+                <p class="card-text flex-grow-1">See your historical best sellers and predict future top products.</p>
+                <a href="/top-selling-prediction" class="btn btn-outline-warning mt-auto">View Predictions</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5 col-lg-4">
+            <div class="card h-100 border-info shadow-sm hover-card">
+              <div class="card-header bg-info text-white">
+                <i class="comments icon"></i> AI Assistant
+              </div>
+              <div class="card-body d-flex flex-column">
+                <p class="card-text flex-grow-1">Get instant answers about inventory, sales, and trends using our AI chatbot.</p>
+                <button onclick="toggleChatInterface()" class="btn btn-outline-info mt-auto">Chat Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      /* Animation keyframes */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  /* Animate stats cards */
+  .ui.fluid.card {
+    opacity: 0;
+    animation: scaleIn 0.6s ease-out forwards;
+  }
+
+  .ui.fluid.card:nth-child(1) { animation-delay: 0.1s; }
+  .ui.fluid.card:nth-child(2) { animation-delay: 0.2s; }
+  .ui.fluid.card:nth-child(3) { animation-delay: 0.3s; }
+  .ui.fluid.card:nth-child(4) { animation-delay: 0.4s; }
+
+  /* Animate AI feature cards */
+  .hover-card {
+    opacity: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .hover-card.animate {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1) !important;
+  }
+
+  /* Animate icons */
+  .card-header i {
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+
+  .hover-card:hover .card-header i {
+    transform: scale(1.2);
+  }
+
+  /* Animate buttons */
+  .btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150%;
+    height: 150%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+    transition: transform 0.6s ease;
+  }
+
+  .btn:hover::after {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Animate sidebar menu items */
+  .nav-item {
+    opacity: 0;
+    animation: slideInRight 0.5s ease-out forwards;
+  }
+
+  .nav-item:nth-child(1) { animation-delay: 0.1s; }
+  .nav-item:nth-child(2) { animation-delay: 0.2s; }
+  .nav-item:nth-child(3) { animation-delay: 0.3s; }
+  .nav-item:nth-child(4) { animation-delay: 0.4s; }
+  .nav-item:nth-child(5) { animation-delay: 0.5s; }
+
+  /* Dashboard title animation */
+  h1.mb-4 {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  /* Counter animation enhancement */
+  .counter {
+    position: relative;
+    display: inline-block;
+  }
+
+  .counter::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .counter:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* Loading animation for AI features */
+  .loading-pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+      .ui.statistic {
+        margin: 0;
+      }
+      .ui.statistic .value {
+        font-size: 2rem !important;
+      }
+      .ui.statistic .label {
+        font-size: 1rem !important;
+        margin-top: 0.5rem;
+      }
+      
+      /* Professional button styles */
+      .card .btn-outline-primary,
+      .card .btn-outline-warning,
+      .card .btn-outline-secondary {
+        transition: all 0.3s ease;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        padding: 0.5rem 1.25rem;
+        border-width: 1.5px;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+      }
+      
+      /* Primary button hover effect - blue gradient to match header */
+      .card .btn-outline-primary {
+        border-color: #4a6da7;
+        color: #4a6da7;
+        box-shadow: 0 0 0 rgba(74, 109, 167, 0);
+      }
+      
+      .card .btn-outline-primary:hover {
+        background: linear-gradient(135deg, #4a6da7, #2c4b81);
+        border-color: #2c4b81;
+        color: white;
+        box-shadow: 0 4px 8px rgba(44, 75, 129, 0.3);
+        transform: translateY(-2px);
+      }
+      
+      .card .btn-outline-primary:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(44, 75, 129, 0.3);
+        background: linear-gradient(135deg, #2c4b81, #1c3563);
+      }
+      
+      /* Warning button hover effect - warm gradient */
+      .card .btn-outline-warning {
+        border-color: #ffc107;
+        color: #d39e00;
+        box-shadow: 0 0 0 rgba(255, 193, 7, 0);
+      }
+      
+      .card .btn-outline-warning:hover {
+        background: linear-gradient(135deg, #ffc107, #e0a800);
+        border-color: #e0a800;
+        color: #212529;
+        box-shadow: 0 4px 8px rgba(224, 168, 0, 0.3);
+        transform: translateY(-2px);
+      }
+      
+      .card .btn-outline-warning:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(224, 168, 0, 0.3);
+        background: linear-gradient(135deg, #e0a800, #d39e00);
+      }
+      
+      /* Secondary button hover effect - slate gradient */
+      .card .btn-outline-secondary {
+        border-color: #6c757d;
+        color: #6c757d;
+        box-shadow: 0 0 0 rgba(108, 117, 125, 0);
+      }
+      
+      .card .btn-outline-secondary:hover {
+        background: linear-gradient(135deg, #6c757d, #5a6268);
+        border-color: #5a6268;
+        color: white;
+        box-shadow: 0 4px 8px rgba(90, 98, 104, 0.3);
+        transform: translateY(-2px);
+      }
+      
+      .card .btn-outline-secondary:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(90, 98, 104, 0.3);
+        background: linear-gradient(135deg, #5a6268, #4e555b);
+      }
+      
+      /* Add a subtle glow animation to "View Forecast" and "View Predictions" */
+      .card .btn-outline-primary:hover::before,
+      .card .btn-outline-warning:hover::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.2) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
+        transform: skewX(-25deg);
+        animation: shine 1.5s infinite;
+        z-index: -1;
+      }
+      
+      @keyframes shine {
+        100% {
+          left: 150%;
+        }
+      }
+      
+      /* Card hover effects */
+      .hover-card {
+        transition: all 0.3s ease;
+        border-width: 1.5px;
+      }
+      
+      .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1) !important;
+      }
+      
+      /* Blue card */
+      .border-primary.hover-card:hover {
+        box-shadow: 0 8px 15px rgba(74, 109, 167, 0.2) !important;
+      }
+      
+      /* Yellow card */
+      .border-warning.hover-card:hover {
+        box-shadow: 0 8px 15px rgba(255, 193, 7, 0.2) !important;
+      }
+      
+      /* Gray card */
+      .border-secondary.hover-card:hover {
+        box-shadow: 0 8px 15px rgba(108, 117, 125, 0.2) !important;
+      }
+      
+      /* Card headers */
+      .card-header {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        border-bottom-width: 2px;
+      }
+    </style>
+
+    <script>
+      // Counter animation
+      function animateValue(element, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+          if (!startTimestamp) startTimestamp = timestamp;
+          const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+          const current = Math.floor(progress * (end - start) + start);
+          element.textContent = current.toLocaleString();
+          if (progress < 1) {
+            window.requestAnimationFrame(step);
+          }
+        };
+        window.requestAnimationFrame(step);
+      }
+
+      // Start counter animation when the page loads
+      document.addEventListener('DOMContentLoaded', () => {
+        const counters = document.querySelectorAll('.count-up');
+        counters.forEach(counter => {
+          const target = parseInt(counter.getAttribute('data-target'));
+          animateValue(counter, 0, target, 2000); // 2000ms = 2 seconds animation
+        });
+      });
+    </script>
+  </div>
+  
+  
+  <!-- Add floating AI assistant button and chat interface -->
+  <div class="ai-assistant-launcher" id="aiAssistantLauncher">
+    <button class="launcher-button" onclick="toggleChatInterface()">
+      <i class="comments icon"></i>
+    </button>
+    <div class="launcher-tooltip">AI Assistant</div>
+    
+    <!-- Chat Interface Popup -->
+    <div class="chat-interface" id="chatInterface">
+      <div class="chat-header">
+        <h4>AI Inventory Assistant</h4>
+        <button class="close-button" onclick="toggleChatInterface()">
+          <i class="times icon"></i>
+        </button>
+      </div>
+      
+      <div class="chat-body">
+        <!-- Direct Query Buttons -->
+        <div class="direct-query-section">
+          <div class="direct-query-buttons">
+            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('stock_levels')">Current Stock Levels</button>
+            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('low_stock')">Low Stock Items</button>
+            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('top_selling')">Top Selling Items</button>
+            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('brand_performance')">Brand Performance</button>
+            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('category_performance')">Category Performance</button>
+            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('total_revenue')">Total Revenue</button>
+          </div>
+          
+          <!-- Category search feature -->
+          <div class="category-search mt-3">
+            <h6>Search by Category:</h6>
+            <div class="input-group mb-3">
+              <input type="text" id="categoryInput" class="form-control" placeholder="Enter category name">
+              <button class="btn btn-primary" onclick="searchByCategory()">Search</button>
+            </div>
+            <div class="category-chips">
+              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('Shirt')">Shirt</span>
+              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('T-Shirt')">T-Shirt</span>
+              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('Jeans')">Jeans</span>
+              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('Capri')">Capri</span>
+              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('Trouser')">Trouser</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+          <div class="message assistant-message">Hello! I'm your inventory assistant. How can I help you today?</div>
+        </div>
+        
+        <div class="loading" id="loading">
+          <div class="loading-spinner"></div>
+          <p class="mt-2">Processing your request...</p>
+        </div>
+      </div>
+      
+      <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Type your question here...">
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Floating AI Assistant Button Styles */
+    .ai-assistant-launcher {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+    }
+
+    .launcher-button {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4a6da7, #2c4b81);
+      border: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .launcher-button i {
+      color: white;
+      font-size: 24px;
+    }
+
+    .launcher-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .launcher-tooltip {
+      position: absolute;
+      right: 70px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .ai-assistant-launcher:hover .launcher-tooltip {
+      opacity: 1;
+    }
+
+    /* Add pulse animation */
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(74, 109, 167, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(74, 109, 167, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(74, 109, 167, 0);
+      }
+    }
+
+    .launcher-button {
+      animation: pulse 2s infinite;
+    }
+
+    /* Chat Interface Styles */
+    .chat-interface {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 450px; /* Increased width to accommodate buttons */
+      height: 700px; /* Increased height to accommodate new elements */
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-interface.active {
+      display: flex;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, #4a6da7, #2c4b81);
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-header h4 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .close-button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .chat-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .suggestion-chip {
+      padding: 6px 12px;
+      background: #4a6da7;
+      color: white;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .message {
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      max-width: 85%;
+    }
+
+    .user-message {
+      background: #e3f2fd;
+      margin-left: auto;
+    }
+
+    .assistant-message {
+      background: #f5f5f5;
+    }
+
+    .chat-input {
+      padding: 15px;
+      display: flex;
+      gap: 10px;
+      border-top: 1px solid #eee;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .chat-input button {
+      padding: 8px 15px;
+      background: #4a6da7;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .loading-spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #4a6da7;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Direct Query Section Styles */
+    .direct-query-section {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      background: #f8f9fa;
+    }
+
+    .direct-query-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .direct-query-buttons button {
+      font-size: 0.8rem;
+      padding: 5px 10px;
+      white-space: nowrap;
+    }
+
+    .category-search {
+      padding: 10px 0;
+    }
+
+    .category-search h6 {
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    .category-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .category-chips .badge {
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      transition: background-color 0.2s;
+    }
+
+    .category-chips .badge:hover {
+      background-color: #3c5a8c;
+    }
+
+    /* Adjust chat messages area */
+    .chat-body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    /* Make input group more compact */
+    .input-group {
+      margin-bottom: 8px !important;
+    }
+
+    .input-group input {
+      font-size: 0.9rem;
+      padding: 5px 10px;
+    }
+
+    .input-group button {
+      font-size: 0.9rem;
+      padding: 5px 15px;
+    }
+  </style>
+
+  <script>
+
+  // Intersection Observer for scroll animations
+  document.addEventListener('DOMContentLoaded', function() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    // Observe all hover-cards
+    document.querySelectorAll('.hover-card').forEach(card => {
+      observer.observe(card);
+    });
+
+    // Enhanced counter animation
+    function animateValue(element, start, end, duration) {
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const current = Math.floor(progress * (end - start) + start);
+        element.textContent = current.toLocaleString();
+        
+        // Add loading-pulse class during animation
+        element.classList.add('loading-pulse');
+        
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        } else {
+          // Remove loading-pulse class when animation completes
+          element.classList.remove('loading-pulse');
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+
+    // Start counter animation with enhanced visual feedback
+    const counters = document.querySelectorAll('.count-up');
+    counters.forEach(counter => {
+      const target = parseInt(counter.getAttribute('data-target'));
+      counter.style.opacity = '0';
+      setTimeout(() => {
+        counter.style.opacity = '1';
+        animateValue(counter, 0, target, 2000);
+      }, 300);
+    });
+
+    // Add hover effect for navigation items
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        item.style.transform = 'translateX(10px)';
+        item.style.transition = 'transform 0.3s ease';
+      });
+      
+      item.addEventListener('mouseleave', () => {
+        item.style.transform = 'translateX(0)';
+      });
+    });
+
+    // Animate AI feature cards on hover
+    const aiCards = document.querySelectorAll('.hover-card');
+    aiCards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.querySelector('.card-header i').style.transform = 'scale(1.2) rotate(5deg)';
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.querySelector('.card-header i').style.transform = 'scale(1) rotate(0)';
+      });
+    });
+  });
+
+  // Enhanced sidebar toggle animation
+  document.getElementById('sidebarCollapse').addEventListener('click', function() {
+    this.classList.add('loading-pulse');
+    setTimeout(() => {
+      this.classList.remove('loading-pulse');
+    }, 500);
+  });
+
+    function toggleChatInterface() {
+      const chatInterface = document.getElementById('chatInterface');
+      chatInterface.classList.toggle('active');
+    }
+
+    // Handle Enter key press
+    document.getElementById('userInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    function askQuestion(question) {
+      document.getElementById('userInput').value = question;
+      sendMessage();
+    }
+
+    async function sendMessage() {
+      const userInput = document.getElementById('userInput');
+      const message = userInput.value.trim();
+      
+      if (!message) return;
+
+      addMessage(message, true);
+      userInput.value = '';
+
+      document.getElementById('loading').style.display = 'block';
+
+      try {
+        const response = await fetch('/api/chatbot', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await response.json();
+
+        if (data.reply) {
+          addMessage(data.reply, false);
+        } else if (data.error) {
+          addMessage(`Error: ${data.error}`, false);
+        } else {
+          addMessage('Sorry, I encountered an error processing your request.', false);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        addMessage('Sorry, something went wrong. Please try again.', false);
+      }
+
+      document.getElementById('loading').style.display = 'none';
+
+      const chatMessages = document.getElementById('chatMessages');
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function addMessage(message, isUser) {
+      const chatMessages = document.getElementById('chatMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${isUser ? 'user-message' : 'assistant-message'}`;
+      messageDiv.textContent = message;
+      chatMessages.appendChild(messageDiv);
+    }
+
+    async function directDatabaseQuery(queryType) {
+      // Show a message that we're making a direct query
+      addMessage(`Querying database for ${queryType.replace('_', ' ')}...`, true);
+      
+      // Show loading indicator
+      document.getElementById('loading').style.display = 'block';
+      
+      try {
+        const response = await fetch('/api/db-query', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ queryType })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          let formattedResponse = `**${data.description}**\n\n`;
+          
+          if (data.results.length === 0) {
+            formattedResponse += "No data found.";
+          } else {
+            switch (queryType) {
+              case 'stock_levels':
+              case 'low_stock':
+                formattedResponse += data.results.map(item => 
+                  `- ${item.ItemName} (${item.Brand}, ${item.Size}): ${item.Quantity} units in stock, Price: $${item.Amount}`
+                ).join('\n');
+                break;
+              case 'top_selling':
+                formattedResponse += data.results.map((item, index) => 
+                  `${index + 1}. ${item.ItemName}: ${item.total_sold} units sold`
+                ).join('\n');
+                break;
+              case 'brand_performance':
+              case 'category_performance':
+                formattedResponse += data.results.map(item => 
+                  `- ${item.Brand || item.Category}: ${item.total_sold} units sold, Revenue: $${parseFloat(item.revenue).toFixed(2)}`
+                ).join('\n');
+                break;
+              case 'total_revenue':
+                formattedResponse += `Total Revenue: $${parseFloat(data.results[0].total_revenue).toFixed(2)}`;
+                break;
+              default:
+                formattedResponse += JSON.stringify(data.results, null, 2);
+            }
+          }
+          
+          addMessage(formattedResponse, false);
+        } else {
+          addMessage(`Error: ${data.error}`, false);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        addMessage('Sorry, something went wrong with the database query.', false);
+      }
+      
+      document.getElementById('loading').style.display = 'none';
+      const chatMessages = document.getElementById('chatMessages');
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Category search functions
+    function searchByCategory() {
+      const categoryInput = document.getElementById('categoryInput');
+      const category = categoryInput.value.trim();
+      
+      if (!category) {
+        addMessage("Please enter a category name to search", false);
+        return;
+      }
+      
+      addMessage(`Searching for items in category "${category}"...`, true);
+      queryCategoryItems(category);
+    }
+    
+    function searchCategoryByChip(category) {
+      document.getElementById('categoryInput').value = category;
+      addMessage(`Searching for items in category "${category}"...`, true);
+      queryCategoryItems(category);
+    }
+    
+    async function queryCategoryItems(categoryName) {
+      document.getElementById('loading').style.display = 'block';
+      
+      try {
+        const response = await fetch('/api/db-query', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            queryType: 'category_items', 
+            categoryName: categoryName 
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          let formattedResponse = `**${data.description}**\n\n`;
+          
+          if (data.results.length === 0) {
+            formattedResponse += `No items found in category "${categoryName}".`;
+          } else {
+            formattedResponse += data.results.map(item => 
+              `- ${item.ItemName} (${item.Brand}, ${item.Size}): ${item.Quantity} units in stock, Price: $${item.Amount}`
+            ).join('\n');
+          }
+          
+          addMessage(formattedResponse, false);
+        } else {
+          addMessage(`Error: ${data.error}`, false);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        addMessage('Sorry, something went wrong with the category search.', false);
+      }
+      
+      document.getElementById('loading').style.display = 'none';
+      const chatMessages = document.getElementById('chatMessages');
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  </script>
+  
+  <!--Semantic UI Scripts-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+  
+  <script>
+    $(function() {
+      // Sidebar toggle behavior
+      $('#sidebarCollapse').on('click', function() {
+        $('#sidebar, #content').toggleClass('active');
+      });
+    });
+  </script>
+  
+  
+</body>
+</html>
+
+
