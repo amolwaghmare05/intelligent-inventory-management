@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--Custom CSS-->
+    <link rel="stylesheet" href="styles.css">
+    <!--Semantic-UI CSS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+    <title>Add New Stock</title>
+    <style>
+      :root {
+        --primary-color: #4a6da7;
+        --primary-light: #eef2f7;
+        --text-dark: #2c3e50;
+        --text-light: #ffffff;
+        --border-color: #e0e0e0;
+        --shadow-color: rgba(0, 0, 0, 0.1);
+        --success-color: #28a745;
+        --danger-color: #dc3545;
+        --warning-color: #ffc107;
+      }
+
+      .stock-card {
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        box-shadow: 0 2px 4px var(--shadow-color);
+        margin-bottom: 1rem;
+        background-color: var(--text-light);
+      }
+
+      .stock-card .card-header {
+        background-color: var(--primary-color);
+        color: var(--text-light);
+        border-radius: 7px 7px 0 0;
+        padding: 1rem;
+      }
+
+      .stock-form {
+        background-color: var(--primary-light);
+        border-radius: 8px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .form-label {
+        color: var(--text-dark);
+        font-weight: 500;
+      }
+
+      .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(74, 109, 167, 0.25);
+      }
+
+      .nav-link.active {
+        background-color: var(--primary-light) !important;
+        color: var(--primary-color) !important;
+        font-weight: bold;
+      }
+
+      .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+
+      .btn-primary:hover {
+        background-color: #3c5a8c;
+        border-color: #3c5a8c;
+      }
+
+      .vertical-nav {
+        box-shadow: 0 0 10px var(--shadow-color);
+      }
+
+      .page-header {
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+      }
+
+      .form-section {
+        background-color: var(--text-light);
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px var(--shadow-color);
+      }
+
+      .form-section h4 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+     <!--Vertical Navbar-->
+  <div class="vertical-nav bg-white" id="sidebar">
+    <div class="py-4 px-3 mb-4" style="background: linear-gradient(135deg, #4a6da7, #2c4b81); border-bottom: 3px solid #1c3563;">
+      <div class="media d-flex align-items-center">
+        <img src="iism.png" alt="IIMS Logo" width="70" class="mr-3 rounded-circle img-thumbnail shadow-sm" style="border: 2px solid white; padding: 2px;">
+        &emsp;<div class="media-body">
+          <h4 class="m-0 text-light" style="font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);"><shop-name></h4>
+          <p class="font-weight-light text-white mb-0" style="font-size: 0.85rem; opacity: 0.9;">Intelligent Inventory Management System<p>
+        </div>
+      </div>
+    </div>
+    <form action="/logout?_method=DELETE" method="POST">
+      <center><button type="submit" class="btn btn-danger" ><p class="text-white">Log Out</p></button></center>
+    </form>
+    <h5 class="ui horizontal divider header text-primary">
+      MAIN
+    </h5>
+  
+    <ul class="nav flex-column bg-white mb-0">
+      <li class="nav-item">
+        <a href="/" class="nav-link text-dark font-italic">
+                  <i class="home icon"></i>
+                  Dashboard
+                
+              </a>
+      </li>
+      <li class="nav-item">
+        <a href="/billing" class="nav-link text-dark font-italic">
+          <i class="rupee sign icon"></i>
+                  Bill
+              </a>
+      </li>
+      <li class="nav-item">
+        <a href="/orders" class="nav-link text-dark font-italic">
+          <i class="eye icon"></i>
+                  View Orders
+              </a>
+      </li>
+      <li class="nav-item">
+        <a href="/viewstocks" class="nav-link text-dark font-italic">
+          <i class="tags icon"></i>
+                  View Stocks
+              </a>
+      </li>
+      <li class="nav-item">
+        <a href="/stocks" class="nav-link text-white font-italic" style="background-color: #4a6da7;">
+          <i class="plus circle icon"></i>
+          Add Stock
+        </a>
+      </li>
+    </ul>
+  
+    <h5 class="ui horizontal divider header text-primary">
+      CUSTOMIZE
+    </h5>
+  
+    <ul class="nav flex-column bg-white mb-0">
+      <!-- <li class="nav-item">
+        <a href="/stocks" class="nav-link text-dark font-italic">
+                  <i class="fa fa-area-chart mr-3 text-primary fa-fw"></i>
+                  Add Stock
+              </a>
+      </li> -->
+      <li class="nav-item">
+        <a href="/brands" class="nav-link text-dark font-italic">
+          <i class="yelp icon"></i>
+                  Brand
+              </a>
+      </li>
+      <li class="nav-item">
+        <a href="/categories" class="nav-link text-dark font-italic">
+          <i class="bookmark icon"></i>
+                  Category
+              </a>
+      </li>
+      <li class="nav-item">
+        <a href="/sizes" class="nav-link text-dark font-italic">
+          <i class="check square icon"></i>
+                  Size
+              </a>
+      </li>
+    </ul>
+
+    <h5 class="ui horizontal divider header text-primary">
+      FILTERS
+    </h5>
+  
+    <ul class="nav flex-column bg-white mb-0">
+      <li class="nav-item">
+        <a href="/sales_filter" class="nav-link text-dark font-italic">
+          <i class="yelp icon"></i>
+                  Sales
+              </a>
+      </li>
+      <li class="nav-item">
+        <a href="/stock_filter" class="nav-link text-dark font-italic">
+          <i class="bookmark icon"></i>
+                  Stock
+              </a>
+      </li>
+    </ul>
+
+    <!-- Add AI Features section -->
+    <h5 class="ui horizontal divider header text-primary">
+      AI FEATURES
+    </h5>
+
+    <ul class="nav flex-column bg-white mb-0">
+      <li class="nav-item">
+        <a href="/sales-forecast" class="nav-link text-dark font-italic">
+          <i class="chart line icon"></i>
+          Sales Forecast
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/top-selling-prediction" class="nav-link text-dark">
+          <i class="trophy icon"></i>
+          Top Selling Items
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/inventory-optimization" class="nav-link text-dark font-italic">
+          <i class="box icon"></i>
+          Inventory Optimization
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- End vertical navbar -->
+  
+     <!-- Page content holder -->
+  <div class="page-content p-5" id="content">
+    <!-- Toggle button -->
+    <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4">
+      <i class="align justify icon"></i>
+      <small class="text-uppercase font-weight-bold">Menu</small>
+    </button>
+  
+    <!-- Page content -->
+    <div class="stock-form">
+      <h1 class="page-header">Add New Stock</h1>
+    </div>
+    
+    <center><img class="ui medium rounded image" src="addstock.svg"></center>
+    <br>
+    
+    <div class="form-section">
+      <div class="text-center mb-4">
+        <button type="button" class="btn btn-primary btn-lg btn_row_add_below_end">
+          Add New Item <i class="plus circle icon"></i>
+        </button>
+      </div>
+      
+      <form action="/submitstock" method="POST">
+        <div class="table-responsive">
+          <table class="table table-hover" id="myTable">
+            <thead>
+              <tr class="table-header">
+                <th>Item No.</th>
+                <th>Item ID</th>
+                <th>Item Name</th>
+                <th>Category</th>
+                <th>Brand</th>
+                <th>Size</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            
+            <tbody>
+              <tr>
+                <td>
+                  <center>
+                    <input type="text" class="form-control text-center" id="number1" value="1" name="number1" readonly style="max-width: 70px"/>
+                  </center>
+                </td>
+                <td>
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="itemid1" name="itemid1" required>
+                    <label for="itemid1">Item ID</label>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="itemname1" name="itemname1" required>
+                    <label for="itemname1">Item Name</label>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-floating">
+                    <select class="form-select" name="category1" id="category1" required>
+                      <% category.forEach(function(order){ %>
+                        <option value="<%= order.Category %>"><%= order.Category %></option>
+                      <% }); %>
+                    </select>
+                    <label for="category1">Category</label>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-floating">
+                    <select class="form-select" name="brand1" id="brand1" required>
+                      <% brand.forEach(function(order){ %>
+                        <option value="<%= order.Brand %>"><%= order.Brand %></option>
+                      <% }); %>
+                    </select>
+                    <label for="brand1">Brand</label>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-floating">
+                    <select class="form-select" name="size1" id="size1" required>
+                      <% size.forEach(function(order){ %>
+                        <option value="<%= order.Size %>"><%= order.Size %></option>
+                      <% }); %>
+                    </select>
+                    <label for="size1">Size</label>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-floating">
+                    <input type="number" class="form-control" name="amount1" placeholder="Enter Amount" value=0 id="amount1" required>
+                    <label for="amount1">Amount</label>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-primary btn-lg">
+            <i class="save icon"></i> Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Scripts -->
+  <!-- jQuery first, then Semantic UI, then Bootstrap -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
+  <!-- Custom Scripts -->
+  <script>
+    $(document).ready(function($) {
+      //--->add row at the end > start
+      $(document).on('click', ".btn_row_add_below_end", function(e) {
+        var tableBody = $('#myTable').find("tbody");
+        var trLast = tableBody.find("tr:last");
+        var trNew = trLast.clone();
+        var len = $('#myTable tr').length;
+        
+        trLast.after(trNew);
+
+        // Reset and update form elements in the new row
+        var inputs = trNew.find("input");
+        inputs.each(function(index) {
+          var input = $(this);
+          var oldId = input.attr('id');
+          var newId = oldId.replace(/\d+/, len);
+          
+          input.attr('id', newId);
+          input.attr('name', newId);
+          
+          // Clear value except for number input
+          if (!newId.includes('number')) {
+            input.val('');
+          } else {
+            input.val(len);
+          }
+        });
+
+        // Update select elements
+        var selects = trNew.find("select");
+        selects.each(function(index) {
+          var select = $(this);
+          var oldId = select.attr('id');
+          var newId = oldId.replace(/\d+/, len);
+          
+          select.attr('id', newId);
+          select.attr('name', newId);
+          
+          // Reset to first option
+          select.prop('selectedIndex', 0);
+        });
+
+        // Update labels
+        trNew.find("label").each(function() {
+          var label = $(this);
+          var oldFor = label.attr('for');
+          var newFor = oldFor.replace(/\d+/, len);
+          label.attr('for', newFor);
+        });
+      });
+    });
+  </script>
+  
+  <script>
+    $(function() {
+      // Sidebar toggle behavior
+      $('#sidebarCollapse').on('click', function() {
+        $('#sidebar, #content').toggleClass('active');
+      });
+    });
+  </script>
+  </body>
+</html>

@@ -1,0 +1,146 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+/* CSS Variables for consistent colors */
+:root {
+  --primary-color: #4a6da7;
+  --primary-light: #eef2f7;
+  --secondary-color: #6c757d;
+  --accent-color: #5d9cec;
+  --text-dark: #343a40;
+  --text-light: #f8f9fa;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+body {
+  background-color: var(--primary-light);
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  overflow: hidden;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 0.2em;
+  color: var(--primary-color);
+}
+
+h2 {
+  font-size: 1.8em;
+  color: var(--secondary-color);
+}
+
+.login-container {
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
+  text-align: center;
+}
+
+.login-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px var(--shadow-color);
+  padding: 40px;
+  width: 100%;
+}
+
+.logo-container {
+  margin-bottom: 30px;
+}
+
+.logo {
+  max-width: 150px;
+  height: auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.form-control {
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 12px 15px;
+  width: 100%;
+  font-size: 14px;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 109, 167, 0.2);
+}
+
+.btn-login {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 15px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.btn-login:hover {
+  background-color: #3a5a8c;
+}
+
+.login-footer {
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--secondary-color);
+}
+
+.login-footer a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Background elements */
+.decoration {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.05;
+  z-index: -1;
+}
+
+.decoration-1 {
+  width: 300px;
+  height: 300px;
+  background-color: var(--primary-color);
+  top: -100px;
+  right: -100px;
+}
+
+.decoration-2 {
+  width: 200px;
+  height: 200px;
+  background-color: var(--accent-color);
+  bottom: -50px;
+  left: -50px;
+}

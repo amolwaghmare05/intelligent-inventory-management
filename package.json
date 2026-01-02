@@ -1,0 +1,45 @@
+{
+  "name": "intelligent-inventory-management",
+  "version": "1.0.0",
+  "description": "AI-powered inventory management system with predictive analytics, automated billing, and real-time stock tracking",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Amol Waghmare (Collaborative Project)",
+  "license": "ISC",
+  "dependencies": {
+    "@copilotkit/backend": "^0.37.0",
+    "@copilotkit/react-core": "^1.6.0",
+    "@copilotkit/react-ui": "^1.6.0",
+    "@google/generative-ai": "^0.24.0",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "chart.js": "^3.0.1",
+    "cookie-parser": "^1.4.7",
+    "csurf": "^1.10.0",
+    "csv-parser": "^3.2.0",
+    "easyinvoice": "^1.0.111",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-flash": "^0.0.2",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.17.1",
+    "express-validator": "^7.2.1",
+    "fs": "^0.0.1-security",
+    "helmet": "^8.1.0",
+    "method-override": "^3.0.0",
+    "moment": "^2.30.1",
+    "mongodb": "^3.6.5",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.12.0",
+    "natives": "^1.1.6",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "pdfkit": "^0.11.0"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.7"
+  }
+}

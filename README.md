@@ -1,0 +1,194 @@
+
+# Intelligent Inventory Management System (IIMS)
+
+**Collaborative Project** - Developed as a team project
+
+AI-powered inventory management system for retail stores with features including intelligent stock predictions, automated billing, sales analytics, and real-time inventory tracking using NodeJS, MySQL, and AI/ML technologies.
+
+This dynamic web application helps retail businesses manage their inventory efficiently with features like Billing, Adding/Removing Inventory, Sales Analysis, and Stock Predictions using machine learning algorithms.
+
+## Architecture
+
+This application follows the MVC (Model-View-Controller) architecture:
+
+- **Models**: Database models and business logic
+- **Views**: EJS templates for rendering HTML
+- **Controllers**: Logic to handle requests
+- **Routes**: Route definitions
+- **Config**: Configuration files
+- **Middleware**: Custom middleware functions
+- **Utils**: Utility functions
+
+## Directory Structure
+
+```
+├── config/             # Configuration files
+│   ├── database.js     # Database connection
+│   └── passport-config.js # Passport authentication
+├── controllers/        # Controllers for handling requests
+├── middleware/         # Custom middleware
+├── models/             # Database models
+├── public/             # Static files (CSS, JS, images)
+├── routes/             # Route definitions
+├── utils/              # Utility functions
+├── views/              # EJS templates
+├── app.js              # Main application setup
+└── server.js           # Entry point
+```
+
+
+## Demo
+
+Here is a working demo of the website:-
+
+
+## Authors
+
+
+
+
+## Contributing
+
+Contributions are always welcome!
+
+You can let me know if you want to contribute to this project.
+
+
+
+
+## Features
+
+- Stock Inventory
+- Billing
+- Sales Analysis
+- Stock Analysis
+- Generation of Bill in printable format
+- Sales Forecasting
+- Top Selling Items Prediction
+- Inventory Optimization
+- User authentication and authorization
+- Security features (CSRF protection, rate limiting, etc.)
+
+
+
+## Tech Stack
+
+**Client:** Javascript, Bootstrap, Semantic-UI
+
+**Server:** Node, Express
+
+## MySQL database setup and congfiguration
+
+Install MySQL
+
+```bash
+  https://dev.mysql.com/downloads/installer/
+```
+
+MySQL Installation Guide
+
+```bash
+  https://www.youtube.com/watch?v=u96rVINbAUI
+```
+Download mysql database **.sql** file from here
+
+```bash
+  https://drive.google.com/file/d/1r0zaU-5Jzvf8aAqs4a-yiOMHxdkR5Y87/view?usp=sharing
+```
+Open mysql command prompt(as Administrator) and run the following command:-
+
+```bash
+  create database warehousedb;
+```
+
+Copy that sql file into this location (Your MySQL Server version could be different)
+```bash
+  C:\Program Files\MySQL\MySQL Server 8.0\bin
+```
+
+Now open command prompt(as Administrator) and execute following commands
+```bash
+  cd "C:\Program Files\MySQL\MySQL Server 8.0\bin"
+  mysql –u root –p warehousedb < warehousedb.sql
+```
+
+## Install node dependencies and run server locally
+
+Download and install **node** from here
+```bash
+  https://nodejs.org/en/download/
+```
+
+Clone the project (You can also download this project directly as a zip file by clicking on **Code** present on top of this page and then clicking **Download Zip**)
+
+```bash
+  git clone https://github.com/ShetuRaj/Inventory-Management-and-Billing-Website.git
+```
+
+Go to the project directory
+
+```bash
+  cd Inventory-Management-and-Billing-Website
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+
+Start the server (Please set up the environment variables before starting the server)
+
+```bash
+  npm run start
+```
+
+Type this is your browser to open the local version of the website
+
+```bash
+  http://localhost:5000/
+```
+
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your `.env` file (Create a file named `.env` at the root of your project directory, i.e., in **Inventory-Management-and-Billing-Website** folder)
+
+```bash
+SESSION_SECRET=secret
+
+db_name=warehousedb
+
+db_user_name=<database_user_name>
+
+db_password=<database_password>
+
+login_id=<login_email_address>
+
+login_password=<password_for_login>
+```
+
+
+Here `login_id` and `login_password` are the login credentials for the website. Similarly `db_user_name` and `db_password` are the credenials for the MySQL database which was configured during installation of MySQL. So please change all the credentials accordingly.
+Leave `SESSION_SECRET=secret` and `db_name=warehousedb` as it is.
+
+Folowing is an example with actual values in a .env file:-
+
+```bash
+SESSION_SECRET=secret
+
+db_name=warehousedb
+
+db_user_name=root
+
+db_password=root1234
+
+login_id=admin@xyz.com
+
+login_password=admin1234
+```
+
+In the `.env` file, don't use double quotes for values and there should be no space before or after `=`. Also you can edit the shop name and other details on the bill pdf generated by simply going to **views/bill.ejs** and editing lines `488` to `494` in the file
+
+

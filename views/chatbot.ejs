@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--Custom CSS-->
+    <link rel="stylesheet" href="styles.css">
+    <!--Semantic-UI CSS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>AI Assistant</title>
+    <style>
+      .chat-container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+      .chat-messages {
+        height: 400px;
+        overflow-y: auto;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        padding: 10px 15px;
+        border-radius: 15px;
+        max-width: 80%;
+        word-wrap: break-word;
+      }
+
+      .user-message {
+        background: #4a6da7;
+        color: white;
+        margin-left: auto;
+      }
+
+      .assistant-message {
+        background: #e9ecef;
+        color: #212529;
+      }
+
+      .chat-input {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .chat-input input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+      }
+
+      .chat-input button {
+        padding: 10px 20px;
+        background: #4a6da7;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .chat-input button:hover {
+        background: #3c5a8c;
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        margin: 10px 0;
+      }
+
+      .loading-spinner {
+        width: 30px;
+        height: 30px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #4a6da7;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .suggestion-chip {
+        padding: 8px 15px;
+        background: #4a6da7;
+        color: white;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: background 0.2s;
+      }
+
+      .suggestion-chip:hover {
+        background: #3c5a8c;
+      }
+    </style>
+  </head>
+  <body>
+    <!--Vertical Navbar-->
+    <div class="vertical-nav bg-white" id="sidebar">
+      <div class="py-4 px-3 mb-4" style="background: linear-gradient(135deg, #4a6da7, #2c4b81); border-bottom: 3px solid #1c3563;">
+        <div class="media d-flex align-items-center">
+          <img src="iism.png" alt="IIMS Logo" width="70" class="mr-3 rounded-circle img-thumbnail shadow-sm" style="border: 2px solid white; padding: 2px;">
+          &emsp;<div class="media-body">
+            <h4 class="m-0 text-light" style="font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);"><shop-name></h4>
+            <p class="font-weight-light text-white mb-0" style="font-size: 0.85rem; opacity: 0.9;">Intelligent Inventory Management System<p>
+          </div>
+        </div>
+      </div>
+      <form action="/logout?_method=DELETE" method="POST">
+        <center><button type="submit" class="btn btn-danger"><p class="text-white">Log Out</p></button></center>
+      </form>
+      <h5 class="ui horizontal divider header text-primary">
+        MAIN
+      </h5>
+
+      <ul class="nav flex-column bg-white mb-0">
+        <li class="nav-item">
+          <a href="/dashboard" class="nav-link text-dark font-italic">
+            <i class="home icon"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/billing" class="nav-link text-dark font-italic">
+            <i class="rupee sign icon"></i>
+            Bill
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/orders" class="nav-link text-dark font-italic">
+            <i class="eye icon"></i>
+            View Orders
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/viewstocks" class="nav-link text-dark font-italic">
+            <i class="tags icon"></i>
+            View Stocks
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/stocks" class="nav-link text-dark font-italic">
+            <i class="plus circle icon"></i>
+            Add Stock
+          </a>
+        </li>
+      </ul>
+
+      <h5 class="ui horizontal divider header text-primary">
+        CUSTOMIZE
+      </h5>
+
+      <ul class="nav flex-column bg-white mb-0">
+        <li class="nav-item">
+          <a href="/brands" class="nav-link text-dark font-italic">
+            <i class="yelp icon"></i>
+            Brand
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/categories" class="nav-link text-dark font-italic">
+            <i class="bookmark icon"></i>
+            Category
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/sizes" class="nav-link text-dark font-italic">
+            <i class="check square icon"></i>
+            Size
+          </a>
+        </li>
+      </ul>
+
+      <h5 class="ui horizontal divider header text-primary">
+        AI FEATURES
+      </h5>
+
+      <ul class="nav flex-column bg-white mb-0">
+        <li class="nav-item">
+          <a href="/sales-forecast" class="nav-link text-dark font-italic">
+            <i class="chart line icon"></i>
+            Sales Forecast
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/chatbot" class="nav-link text-white font-italic" style="background-color: #4a6da7;">
+            <i class="comments icon"></i>
+            AI Assistant
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- End vertical navbar -->
+
+    <!-- Page content holder -->
+    <div class="page-content p-5" id="content">
+      <!-- Toggle button -->
+      <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4">
+        <i class="align justify icon"></i>
+        <small class="text-uppercase font-weight-bold">Menu</small>
+      </button>
+
+      <div class="chat-container">
+        <h2 class="mb-4">AI Inventory Assistant</h2>
+      
+        <div class="direct-query-section">
+          <div class="direct-query-buttons">
+            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('stock_levels')">Current Stock Levels</button>
+            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('low_stock')">Low Stock Items</button>
+            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('top_selling')">Top Selling Items</button>
+            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('brand_performance')">Brand Performance</button>
+            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('category_performance')">Category Performance</button>
+            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('total_revenue')">Total Revenue</button>
+          </div>
+          
+          <!-- Category search feature -->
+          <div class="category-search mt-3">
+            <h6>Search by Category:</h6>
+            <div class="input-group mb-3">
+              <input type="text" id="categoryInput" class="form-control" placeholder="Enter category name">
+              <button class="btn btn-primary" onclick="searchByCategory()">Search</button>
+            </div>
+            <div class="category-chips">
+              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('Shirt')">Shirt</span>
+              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('T-Shirt')">T-Shirt</span>
+              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('Jeans')">Jeans</span>
+              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('Capri')">Capri</span>
+              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('Trouser')">Trouser</span>
+            </div>
+          </div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="message assistant-message">Hello! I'm your inventory assistant. How can I help you today?</div>
+        </div>
+        <div class="loading" id="loading">
+          <div class="loading-spinner"></div>
+          <p class="mt-2">Processing your request...</p>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="userInput" placeholder="Type your question here...">
+          <button onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js"></script>
+    
+    <script>
+      // Toggle sidebar
+      $(function() {
+        $('#sidebarCollapse').on('click', function() {
+          $('#sidebar, #content').toggleClass('active');
+        });
+      });
+
+      // Handle Enter key press
+      document.getElementById('userInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          sendMessage();
+        }
+      });
+
+      function askQuestion(question) {
+        document.getElementById('userInput').value = question;
+        sendMessage();
+      }
+
+      async function sendMessage() {
+        const userInput = document.getElementById('userInput');
+        const message = userInput.value.trim();
+        
+        if (!message) return;
+
+        // Add user message to chat
+        addMessage(message, true);
+        userInput.value = '';
+
+        // Show loading indicator
+        document.getElementById('loading').style.display = 'block';
+
+        try {
+          const response = await fetch('/api/chatbot', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message })
+          });
+
+          const data = await response.json();
+
+          if (data.reply) {
+            addMessage(data.reply, false);
+          } else if (data.error) {
+            addMessage(`Error: ${data.error}`, false);
+          } else {
+            addMessage('Sorry, I encountered an error processing your request.', false);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          addMessage('Sorry, something went wrong. Please try again.', false);
+        }
+
+        // Hide loading indicator
+        document.getElementById('loading').style.display = 'none';
+
+        // Scroll to bottom
+        const chatMessages = document.getElementById('chatMessages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function addMessage(message, isUser) {
+        const chatMessages = document.getElementById('chatMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'assistant-message'}`;
+        messageDiv.textContent = message;
+        chatMessages.appendChild(messageDiv);
+      }
+
+      // Category search functions
+      function searchByCategory() {
+        const categoryInput = document.getElementById('categoryInput');
+        const category = categoryInput.value.trim();
+        
+        if (!category) {
+          addMessage("Please enter a category name to search", false);
+          return;
+        }
+        
+        addMessage(`Searching for items in category "${category}"...`, true);
+        queryCategoryItems(category);
+      }
+      
+      function searchCategoryByChip(category) {
+        document.getElementById('categoryInput').value = category;
+        addMessage(`Searching for items in category "${category}"...`, true);
+        queryCategoryItems(category);
+      }
+      
+      async function queryCategoryItems(categoryName) {
+        // Show loading indicator
+        document.getElementById('loading').style.display = 'block';
+        
+        try {
+          const response = await fetch('/api/db-query', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+              queryType: 'category_items', 
+              categoryName: categoryName 
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            let formattedResponse = `**${data.description}**\n\n`;
+            
+            if (data.results.length === 0) {
+              formattedResponse += `No items found in category "${categoryName}".`;
+            } else {
+              formattedResponse += data.results.map(item => 
+                `- ${item.ItemName} (${item.Brand}, ${item.Size}): ${item.Quantity} units in stock, Price: $${item.Amount}`
+              ).join('\n');
+            }
+            
+            addMessage(formattedResponse, false);
+          } else {
+            addMessage(`Error: ${data.error}`, false);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          addMessage('Sorry, something went wrong with the category search.', false);
+        }
+        
+        // Hide loading indicator
+        document.getElementById('loading').style.display = 'none';
+        
+        // Scroll to bottom
+        const chatMessages = document.getElementById('chatMessages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      async function directDatabaseQuery(queryType) {
+        // Show a message that we're making a direct query
+        addMessage(`Querying database for ${queryType.replace('_', ' ')}...`, true);
+        
+        // Show loading indicator
+        document.getElementById('loading').style.display = 'block';
+        
+        try {
+          const response = await fetch('/api/db-query', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ queryType })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            // Format the results as a readable message
+            let formattedResponse = `**${data.description}**\n\n`;
+            
+            if (data.results.length === 0) {
+              formattedResponse += "No data found.";
+            } else {
+              // Handle different query types with appropriate formatting
+              switch (queryType) {
+                case 'stock_levels':
+                case 'low_stock':
+                  formattedResponse += data.results.map(item => 
+                    `- ${item.ItemName} (${item.Brand}, ${item.Size}): ${item.Quantity} units in stock, Price: $${item.Amount}`
+                  ).join('\n');
+                  break;
+                case 'top_selling':
+                  formattedResponse += data.results.map((item, index) => 
+                    `${index + 1}. ${item.ItemName}: ${item.total_sold} units sold`
+                  ).join('\n');
+                  break;
+                case 'brand_performance':
+                case 'category_performance':
+                  formattedResponse += data.results.map(item => 
+                    `- ${item.Brand || item.Category}: ${item.total_sold} units sold, Revenue: $${parseFloat(item.revenue).toFixed(2)}`
+                  ).join('\n');
+                  break;
+                case 'total_revenue':
+                  formattedResponse += `Total Revenue: $${parseFloat(data.results[0].total_revenue).toFixed(2)}`;
+                  break;
+                default:
+                  formattedResponse += JSON.stringify(data.results, null, 2);
+              }
+            }
+            
+            addMessage(formattedResponse, false);
+          } else {
+            addMessage(`Error: ${data.error}`, false);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          addMessage('Sorry, something went wrong with the database query.', false);
+        }
+        
+        // Hide loading indicator
+        document.getElementById('loading').style.display = 'none';
+        
+        // Scroll to bottom
+        const chatMessages = document.getElementById('chatMessages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+    </script>
+  </body>
+</html> 
