@@ -38,6 +38,21 @@ const app = express();
 // Initialize global users array (in a real app, this would be a database)
 global.users = [];
 
+// Add admin user from environment variables
+const User = require('./models/User');
+(async () => {
+  if (process.env.login_id && process.env.login_password) {
+    const hashedPassword = await User.hashPassword(process.env.login_password);
+    global.users.push({
+      id: 'admin',
+      name: 'Admin',
+      email: process.env.login_id,
+      password: hashedPassword
+    });
+    console.log('Admin user initialized with email:', process.env.login_id);
+  }
+})();
+
 // Initialize Passport
 initializePassport(
   passport,
