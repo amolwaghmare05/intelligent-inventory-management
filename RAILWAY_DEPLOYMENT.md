@@ -24,11 +24,11 @@
 5. Go to **"Variables"** tab
 6. Copy these values (keep them handy):
    ```
-   MYSQLHOST=containers-us-west-xx.railway.app
-   MYSQLPORT=6543
-   MYSQLDATABASE=railway
-   MYSQLUSER=root
-   MYSQLPASSWORD=xxxxxxxxxxxxx
+   MYSQLHOST=containers-us-west-xx.railway.app //mysql.railway.internal
+   MYSQLPORT=6543 //3306
+   MYSQLDATABASE=railway //railway
+   MYSQLUSER=root //root
+   MYSQLPASSWORD=xxxxxxxxxxxxx //sVfnfsmjmLOTQpbqqqhjPmXXWRaUyLGL
    ```
 
 ### Step 3: Import Database Schema
