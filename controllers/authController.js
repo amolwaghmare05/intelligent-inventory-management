@@ -9,6 +9,8 @@ exports.showLogin = (req, res) => {
 
 // Process login
 exports.login = (req, res, next) => {
+  console.log('Login attempt for:', req.body.email);
+  console.log('Total users in system:', global.users.length);
   passport.authenticate('local', {
     successRedirect: '/dashboard',
     failureRedirect: '/login',
