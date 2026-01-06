@@ -272,22 +272,28 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Forecast Settings</h5>
-              <form id="forecast-form">
+              
+              <div class="alert alert-info">
+                <h6 class="alert-heading">🚧 Coming Soon!</h6>
+                <p class="mb-0">AI-powered sales forecasting is currently under development. This feature will be available in a future update.</p>
+              </div>
+              
+              <form id="forecast-form" style="display: none;">
                 <div class="mb-3">
                   <label for="forecast-days" class="form-label">Forecast Days</label>
-                  <select class="form-select" id="forecast-days" name="days">
+                  <select class="form-select" id="forecast-days" name="days" disabled>
                     <option value="7">Next 7 days</option>
                     <option value="14">Next 14 days</option>
                     <option value="30">Next 30 days</option>
                   </select>
                 </div>
                 <div class="d-flex gap-2">
-                  <button type="submit" class="btn btn-primary">Generate Forecast</button>
-                  <button type="button" id="train-model-btn" class="btn btn-outline-secondary">Train Model</button>
+                  <button type="submit" class="btn btn-primary" disabled>Generate Forecast</button>
+                  <button type="button" id="train-model-btn" class="btn btn-outline-secondary" disabled>Train Model</button>
                 </div>
               </form>
               
-              <div id="data-source-notice" class="alert alert-warning mt-3">
+              <div id="data-source-notice" class="alert alert-warning mt-3" style="display: none;">
                 <i class="info circle icon"></i> 
                 <small>Not enough transaction data for accurate forecasting.</small>
               </div>
