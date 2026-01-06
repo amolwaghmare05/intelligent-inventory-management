@@ -106,6 +106,11 @@ app.use('/', orderRoutes);
 app.use('/', forecastRoutes);
 app.use('/', predictionRoutes);
 
+// Inventory optimization - redirect to dashboard (feature not yet implemented)
+app.get('/inventory-optimization', isAuthenticated, (req, res) => {
+  res.redirect('/index');
+});
+
 // Root route - redirect to login
 app.get('/', (req, res) => {
   res.redirect('/login');
