@@ -39,15 +39,8 @@ const app = express();
 // Trust proxy - required for Railway/Heroku/Render deployments
 app.set('trust proxy', 1);
 
-// Initialize global users array (in a real app, this would be a database)
-global.users = [];
-
 // Initialize Passport
-initializePassport(
-  passport,
-  email => global.users.find(user => user.email === email),
-  id => global.users.find(user => user.id === id)
-);
+initializePassport(passport);
 
 // Set view engine
 app.set('view engine', 'ejs');

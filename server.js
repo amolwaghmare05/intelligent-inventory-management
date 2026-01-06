@@ -5,17 +5,25 @@ const User = require('./models/User');
 // Load environment variables
 dotenv.config();
 
-// Initialize admin user before starting server
+// Initialize admin user in database before starting server
 async function initializeAdmin() {
   if (process.env.login_id && process.env.login_password) {
-    const hashedPassword = await User.hashPassword(process.env.login_password);
-    global.users = [{
-      id: 'admin',
-      name: 'Admin',
-      email: process.env.login_id,
-      password: hashedPassword
-    }];
-    console.log('✓ Admin user initialized:', process.env.login_id);
+    try {
+      // Check if admin already exists in database
+      const existingAdmin = await User.findByEmail(process.env.login_id);
+      
+      if (existingAdmin) {
+        console.log('✓ Admin user already exists in database:', process.env.login_id);
+      } else {
+        // Create admin user in database
+        const hashedPassword = await User.hashPassword(process.env.login_password);
+        await User.create('Admin', process.env.login_id, hashedPassword);
+        console.log('✓ Admin user created in database:', process.env.login_id);
+      }
+    } catch (error) {
+      console.error('Error initializing admin user:', error);
+      throw error;
+    }
   } else {
     console.warn('⚠ Warning: login_id or login_password not set in environment variables');
   }

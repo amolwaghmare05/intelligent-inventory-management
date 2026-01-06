@@ -10,7 +10,6 @@ exports.showLogin = (req, res) => {
 // Process login
 exports.login = (req, res, next) => {
   console.log('Login attempt for:', req.body.email);
-  console.log('Total users in system:', global.users.length);
   passport.authenticate('local', {
     successRedirect: '/dashboard',
     failureRedirect: '/login',
@@ -36,16 +35,19 @@ exports.register = async (req, res) => {
       });
     }
     
-    // If validation passes, hash the password and create the user
-    const hashedPassword = await User.hashPassword(req.body.password);
+    // Check if user already exists
+    const existingUser = await User.findByEmail(req.body.email);
+    if (existingUser) {
+      return res.render('register.ejs', { 
+        errors: [{ msg: 'Email already registered' }],
+        name: req.body.name,
+        email: req.body.email
+      });
+    }
     
-    // Add user to the users array (in a real app, this would be a database operation)
-    global.users.push({
-      id: Date.now().toString(),
-      name: req.body.name,
-      email: req.body.email,
-      password: hashedPassword
-    });
+    // Hash the password and create the user in database
+    const hashedPassword = await User.hashPassword(req.body.password);
+    await User.create(req.body.name, req.body.email, hashedPassword);
     
     req.flash('success', 'Registration successful! You can now log in.');
     res.redirect('/login');

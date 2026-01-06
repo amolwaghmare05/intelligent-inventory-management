@@ -1,18 +1,19 @@
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/User');
 
-function initialize(passport, getUserByEmail, getUserById) {
+function initialize(passport) {
   const authenticateUser = async (email, password, done) => {
     console.log('Authenticating user:', email);
-    const user = getUserByEmail(email);
     
-    if (!user) {
-      console.log('User not found:', email);
-      return done(null, false, { message: 'No user with that email' });
-    }
-    
-    console.log('User found, checking password...');
     try {
+      const user = await User.findByEmail(email);
+      
+      if (!user) {
+        console.log('User not found:', email);
+        return done(null, false, { message: 'No user with that email' });
+      }
+      
+      console.log('User found, checking password...');
       if (await User.comparePassword(password, user.password)) {
         console.log('Password correct, login successful');
         return done(null, user);
@@ -29,8 +30,14 @@ function initialize(passport, getUserByEmail, getUserById) {
   passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser));
   
   passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((id, done) => {
-    return done(null, getUserById(id));
+  
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const user = await User.findById(id);
+      return done(null, user);
+    } catch (error) {
+      return done(error);
+    }
   });
 }
 
