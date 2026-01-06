@@ -14,6 +14,7 @@ dotenv.config();
 
 // Import middleware
 const { csrfProtection, loginLimiter, helmetConfig, apiSecurityHeaders } = require('./middleware/securityMiddleware');
+const { checkAuthenticated } = require('./middleware/authMiddleware');
 
 // Import database connection
 const mysqlConnection = require('./config/database');
@@ -107,7 +108,7 @@ app.use('/', forecastRoutes);
 app.use('/', predictionRoutes);
 
 // Inventory optimization - redirect to dashboard (feature not yet implemented)
-app.get('/inventory-optimization', isAuthenticated, (req, res) => {
+app.get('/inventory-optimization', checkAuthenticated, (req, res) => {
   res.redirect('/index');
 });
 
