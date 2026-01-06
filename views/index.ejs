@@ -603,66 +603,12 @@
   </div>
   
   
-  <!-- Add floating AI assistant button and chat interface -->
+  <!-- Add floating AI assistant button -->
   <div class="ai-assistant-launcher" id="aiAssistantLauncher">
-    <button class="launcher-button" onclick="toggleChatInterface()">
+    <button class="launcher-button" onclick="showComingSoonMessage()">
       <i class="comments icon"></i>
     </button>
-    <div class="launcher-tooltip">AI Assistant</div>
-    
-    <!-- Chat Interface Popup -->
-    <div class="chat-interface" id="chatInterface">
-      <div class="chat-header">
-        <h4>AI Inventory Assistant</h4>
-        <button class="close-button" onclick="toggleChatInterface()">
-          <i class="times icon"></i>
-        </button>
-      </div>
-      
-      <div class="chat-body">
-        <!-- Direct Query Buttons -->
-        <div class="direct-query-section">
-          <div class="direct-query-buttons">
-            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('stock_levels')">Current Stock Levels</button>
-            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('low_stock')">Low Stock Items</button>
-            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('top_selling')">Top Selling Items</button>
-            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('brand_performance')">Brand Performance</button>
-            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('category_performance')">Category Performance</button>
-            <button class="btn btn-primary btn-sm me-2 mb-2" onclick="directDatabaseQuery('total_revenue')">Total Revenue</button>
-          </div>
-          
-          <!-- Category search feature -->
-          <div class="category-search mt-3">
-            <h6>Search by Category:</h6>
-            <div class="input-group mb-3">
-              <input type="text" id="categoryInput" class="form-control" placeholder="Enter category name">
-              <button class="btn btn-primary" onclick="searchByCategory()">Search</button>
-            </div>
-            <div class="category-chips">
-              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('Shirt')">Shirt</span>
-              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('T-Shirt')">T-Shirt</span>
-              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('Jeans')">Jeans</span>
-              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('Capri')">Capri</span>
-              <span class="badge bg-primary me-2 mb-2" style="cursor: pointer;" onclick="searchCategoryByChip('Trouser')">Trouser</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="chat-messages" id="chatMessages">
-          <div class="message assistant-message">Hello! I'm your inventory assistant. How can I help you today?</div>
-        </div>
-        
-        <div class="loading" id="loading">
-          <div class="loading-spinner"></div>
-          <p class="mt-2">Processing your request...</p>
-        </div>
-      </div>
-      
-      <div class="chat-input">
-        <input type="text" id="userInput" placeholder="Type your question here...">
-        <button onclick="sendMessage()">Send</button>
-      </div>
-    </div>
+    <div class="launcher-tooltip">AI Assistant (Coming Soon)</div>
   </div>
 
   <style>
@@ -1151,6 +1097,10 @@
       document.getElementById('loading').style.display = 'none';
       const chatMessages = document.getElementById('chatMessages');
       chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showComingSoonMessage() {
+      alert('AI Assistant is coming soon! This feature is currently under development and will be available in a future update.');
     }
 
     // Category search functions
