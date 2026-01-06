@@ -35,6 +35,9 @@ const initializePassport = require('./config/passport-config');
 // Create Express app
 const app = express();
 
+// Trust proxy - required for Railway/Heroku/Render deployments
+app.set('trust proxy', 1);
+
 // Initialize global users array (in a real app, this would be a database)
 global.users = [];
 
@@ -64,11 +67,12 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  proxy: true, // Trust the reverse proxy
   cookie: {
     httpOnly: true, // Prevents client-side JS from reading the cookie
     secure: process.env.NODE_ENV === 'production', // Requires HTTPS in production
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'strict' // Lax for production to allow form submissions
+    sameSite: 'lax' // Lax to allow form submissions from same site
   }
 }));
 
